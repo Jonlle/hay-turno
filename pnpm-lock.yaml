@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@hookform/resolvers':
+        specifier: ^5.2.2
+        version: 5.2.2(react-hook-form@7.72.0(react@18.3.1))
       '@supabase/supabase-js':
         specifier: ^2.49.8
         version: 2.100.1
-      '@tailwindcss/oxide-win32-x64-msvc':
-        specifier: ^4.2.2
-        version: 4.2.2
       '@tanstack/react-query':
         specifier: ^5.75.5
         version: 5.95.2(react@18.3.1)
@@ -372,6 +372,11 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@hookform/resolvers@5.2.2':
+    resolution: {integrity: sha512-A/IxlMLShx3KjV/HeTcTfaMxdwy690+L/ZADoeaTltLx+CVuzkeVIPuybK3jrRfw7YZnmdKsVVHAlEPIAEUNlA==}
+    peerDependencies:
+      react-hook-form: ^7.55.0
 
   '@inquirer/ansi@1.0.2':
     resolution: {integrity: sha512-S8qNSZiYzFd0wAcyG5AXCvUHC5Sr7xpZ9wZ2py9XR88jUz8wooStVx5M6dRzczbBWjic9NP7+rY0Xi7qqK/aMQ==}
@@ -1969,6 +1974,11 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
+  '@hookform/resolvers@5.2.2(react-hook-form@7.72.0(react@18.3.1))':
+    dependencies:
+      '@standard-schema/utils': 0.3.0
+      react-hook-form: 7.72.0(react@18.3.1)
+
   '@inquirer/ansi@1.0.2': {}
 
   '@inquirer/confirm@5.1.21(@types/node@25.5.0)':
@@ -2210,7 +2220,8 @@ snapshots:
   '@tailwindcss/oxide-win32-arm64-msvc@4.2.2':
     optional: true
 
-  '@tailwindcss/oxide-win32-x64-msvc@4.2.2': {}
+  '@tailwindcss/oxide-win32-x64-msvc@4.2.2':
+    optional: true
 
   '@tailwindcss/oxide@4.2.2':
     optionalDependencies:
