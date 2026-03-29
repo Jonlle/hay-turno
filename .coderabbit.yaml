@@ -1,0 +1,6 @@
+reviews:
+  path_filters:
+    # Third-party skills installed from upstream registries — don't review
+    exclude:
+      - ".agents/skills/**"
+      - "pnpm-lock.yaml"
