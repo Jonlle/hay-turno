@@ -9,7 +9,7 @@ export default mergeConfig(
       environment: 'jsdom',
       globals: true,
       include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
-      setupFiles: ['@testing-library/jest-dom'],
+      setupFiles: ['./vitest-setup.ts'],
     },
   }),
 );
