@@ -8,13 +8,21 @@ import { queueKeys } from './usePublicQueue';
 import { adminQueueKeys } from './useAdminQueue';
 import type { RealtimeChannel } from '@supabase/supabase-js';
 
+interface UseQueueRealtimeOptions {
+  barbershopId: string | undefined;
+  slug?: string;
+}
+
 /**
  * Realtime hook - subscribes to queue changes for a barbershop.
  * Invalidates Query caches when changes arrive so components re-fetch.
  *
  * Subscriptions belong in hooks, not components.
  */
-export function useQueueRealtime(barbershopId: string | undefined) {
+export function useQueueRealtime({
+  barbershopId,
+  slug,
+}: UseQueueRealtimeOptions) {
   const queryClient = useQueryClient();
   const channelRef = useRef<RealtimeChannel | null>(null);
 
@@ -22,10 +30,14 @@ export function useQueueRealtime(barbershopId: string | undefined) {
     if (!barbershopId) return;
 
     const channel = subscribeToQueue(barbershopId, (_payload) => {
-      // Invalidate both public and admin queue caches for this barbershop
-      queryClient.invalidateQueries({
-        queryKey: queueKeys.byId(barbershopId),
-      });
+      // Invalidate public queue cache (slug-keyed when available)
+      if (slug) {
+        queryClient.invalidateQueries({
+          queryKey: queueKeys.bySlug(slug),
+        });
+      }
+
+      // Invalidate admin queue cache (always barbershop-scoped)
       queryClient.invalidateQueries({
         queryKey: adminQueueKeys.byBarbershop(barbershopId),
       });
@@ -39,5 +51,5 @@ export function useQueueRealtime(barbershopId: string | undefined) {
         channelRef.current = null;
       }
     };
-  }, [barbershopId, queryClient]);
+  }, [barbershopId, slug, queryClient]);
 }

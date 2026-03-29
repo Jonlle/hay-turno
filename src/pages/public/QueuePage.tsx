@@ -10,7 +10,7 @@ export function PublicQueuePage() {
   const { barbershopId, queueState, isLoading, notFound } = usePublicQueue(slug);
 
   // Subscribe to realtime changes
-  useQueueRealtime(barbershopId);
+  useQueueRealtime({ barbershopId, slug });
 
   if (isLoading) {
     return (

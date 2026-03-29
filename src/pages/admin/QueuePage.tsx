@@ -27,7 +27,7 @@ export function AdminQueuePage() {
   } = useAuthGuard(slug);
 
   // Subscribe to realtime changes
-  useQueueRealtime(barbershopId);
+  useQueueRealtime({ barbershopId });
 
   const {
     turns,
