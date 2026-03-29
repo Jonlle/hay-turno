@@ -4,22 +4,13 @@ import { useQueueRealtime } from '../../hooks/useQueueRealtime';
 import { QueueBoard } from '../../components/queue/QueueBoard';
 import { LoadingState } from '../../components/queue/LoadingState';
 import { NotFoundPage } from './NotFoundPage';
-import { getBarbershopBySlug } from '../../services/supabase/barbershops';
-import { useQuery } from '@tanstack/react-query';
 
 export function PublicQueuePage() {
   const { slug = '' } = useParams<{ slug: string }>();
-  const { queueState, isLoading, notFound, refetch } = usePublicQueue(slug);
-
-  // Resolve barbershop ID for realtime
-  const { data: barbershop } = useQuery({
-    queryKey: ['barbershop', slug],
-    queryFn: () => getBarbershopBySlug(slug),
-    retry: false,
-  });
+  const { barbershopId, queueState, isLoading, notFound } = usePublicQueue(slug);
 
   // Subscribe to realtime changes
-  useQueueRealtime(barbershop?.id);
+  useQueueRealtime(barbershopId);
 
   if (isLoading) {
     return (
