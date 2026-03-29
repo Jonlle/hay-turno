@@ -1,21 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { getBarbershopBySlug } from '../services/supabase/barbershops';
 import { getQueueForBarbershop } from '../services/supabase/queue';
-import type { TurnItem, QueueState } from '../types';
-import type { TurnRow } from '../services/supabase/queue';
-
-function mapTurnRow(row: TurnRow): TurnItem {
-  return {
-    id: row.id,
-    barbershopId: row.barbershop_id,
-    turnNumber: row.turn_number,
-    clientName: row.client_name,
-    source: row.source,
-    status: row.status,
-    joinedAt: row.joined_at,
-    calledAt: row.called_at,
-  };
-}
+import type { QueueState } from '../types';
+import { mapTurnRow } from '../utils/mappers';
 
 export const queueKeys = {
   all: ['queue'] as const,
@@ -56,6 +43,7 @@ export function usePublicQueue(slug: string) {
     : null;
 
   return {
+    barbershopId,
     queueState,
     isLoading: barbershopQuery.isLoading || queueQuery.isLoading,
     notFound: !barbershopQuery.isLoading && !barbershopQuery.data,
