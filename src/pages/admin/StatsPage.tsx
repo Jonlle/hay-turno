@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
 import { useAdminUiStore } from '../../stores/adminUi';
@@ -18,9 +19,14 @@ export function AdminStatsPage() {
     needsLogin,
   } = useAuthGuard(slug);
 
-  // Auth guards
+  // Redirect if login needed
+  useEffect(() => {
+    if (needsLogin) {
+      navigate(`/admin/${slug}/login`, { replace: true });
+    }
+  }, [needsLogin, navigate, slug]);
+
   if (needsLogin) {
-    navigate(`/admin/${slug}/login`, { replace: true });
     return null;
   }
 

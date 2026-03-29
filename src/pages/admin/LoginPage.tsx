@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -47,9 +48,14 @@ export function AdminLoginPage() {
     },
   });
 
-  // If already authorized, redirect to queue
+  // Redirect if already authorized
+  useEffect(() => {
+    if (isAuthorized) {
+      navigate(`/admin/${slug}/queue`, { replace: true });
+    }
+  }, [isAuthorized, navigate, slug]);
+
   if (isAuthorized) {
-    navigate(`/admin/${slug}/queue`, { replace: true });
     return null;
   }
 
