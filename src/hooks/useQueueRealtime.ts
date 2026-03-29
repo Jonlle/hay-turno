@@ -22,9 +22,9 @@ export function useQueueRealtime(barbershopId: string | undefined) {
     if (!barbershopId) return;
 
     const channel = subscribeToQueue(barbershopId, (_payload) => {
-      // Invalidate both public and admin queue caches
+      // Invalidate both public and admin queue caches for this barbershop
       queryClient.invalidateQueries({
-        queryKey: queueKeys.all,
+        queryKey: queueKeys.byId(barbershopId),
       });
       queryClient.invalidateQueries({
         queryKey: adminQueueKeys.byBarbershop(barbershopId),

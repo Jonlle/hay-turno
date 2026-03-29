@@ -7,6 +7,8 @@ import { mapTurnRow } from '../utils/mappers';
 export const queueKeys = {
   all: ['queue'] as const,
   bySlug: (slug: string) => [...queueKeys.all, 'slug', slug] as const,
+  byId: (barbershopId: string) =>
+    [...queueKeys.all, 'id', barbershopId] as const,
 };
 
 /**
