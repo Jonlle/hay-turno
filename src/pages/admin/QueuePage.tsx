@@ -47,6 +47,9 @@ export function AdminQueuePage() {
       queryClient.clear();
       navigate(`/admin/${slug}/login`, { replace: true });
     },
+    onError: (error) => {
+      console.error('Sign out failed:', error);
+    },
   });
 
   // Redirect if login needed
@@ -113,7 +116,7 @@ export function AdminQueuePage() {
         {/* Next button */}
         <NextButton
           onClick={() => callNext()}
-          isDisabled={!currentCalled}
+          isDisabled={!currentCalled && waitingTurns.length === 0}
           isPending={isCallingNext}
           hasWaitingTurns={waitingTurns.length > 0}
         />
