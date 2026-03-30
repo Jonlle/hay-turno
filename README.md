@@ -40,12 +40,12 @@ pnpm typecheck    # TypeScript type checking
 
 ## Project Documentation
 
-- `AGENTS.md` — project instructions for coding agents
-- `docs/sdd/proposal.md` — MVP proposal
-- `docs/sdd/design.md` — technical design
-- `docs/sdd/spec.md` — functional and non-functional specification
-- `docs/sdd/tasks.md` — implementation task breakdown
-- `.atl/skill-registry.md` — installed skills registry
+- [AGENTS.md](AGENTS.md) — project instructions for coding agents
+- [docs/sdd/proposal.md](docs/sdd/proposal.md) — MVP proposal
+- [docs/sdd/design.md](docs/sdd/design.md) — technical design
+- [docs/sdd/spec.md](docs/sdd/spec.md) — functional and non-functional specification
+- [docs/sdd/tasks.md](docs/sdd/tasks.md) — implementation task breakdown
+- [.atl/skill-registry.md](.atl/skill-registry.md) — installed skills registry
 
 ## Current Status
 
@@ -67,7 +67,7 @@ pnpm typecheck    # TypeScript type checking
 4. Disable email confirmation in Auth settings (dev only)
 5. `pnpm dev` — app runs at `http://localhost:5173`
 
-Demo credentials: `admin@demo.com` / `demo1234`
+Demo credentials (local/dev seed only — never for staging/production): `admin@demo.com` / `demo1234`
 
 ## Notes
 
