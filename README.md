@@ -17,7 +17,7 @@ The product is designed to let clients check the Queue from a link or QR code, j
 
 - React 18 + Vite + TypeScript
 - React Router
-- Tailwind CSS
+- Tailwind CSS v4
 - shadcn/ui
 - React Hook Form + Zod
 - TanStack Query
@@ -31,9 +31,11 @@ The product is designed to let clients check the Queue from a link or QR code, j
 ## Commands
 
 ```bash
-pnpm test
-corepack pnpm test
-corepack pnpm exec tsc --noEmit
+pnpm dev          # Start Vite dev server
+pnpm build        # Production build
+pnpm test         # Run all tests
+pnpm test:watch   # Run tests in watch mode
+pnpm typecheck    # TypeScript type checking
 ```
 
 ## Project Documentation
@@ -43,21 +45,32 @@ corepack pnpm exec tsc --noEmit
 - `docs/sdd/design.md` — technical design
 - `docs/sdd/spec.md` — functional and non-functional specification
 - `docs/sdd/tasks.md` — implementation task breakdown
+- `.atl/skill-registry.md` — installed skills registry
 
 ## Current Status
 
-The repository is in the foundation stage.
+**MVP fully implemented.** All 17 tasks across 4 phases complete.
 
-Completed so far:
+- Data services: barbershops, queue, auth, memberships, stats, realtime
+- Public UI: queue board, remote join form, not-found page
+- Admin UI: login, queue control (walk-in + next), day/week/month stats
+- Realtime subscriptions for live queue updates
+- Colombia timezone-aware stats aggregation
+- Dev seed environment (auto-creates demo barbershop + admin on startup)
+- **73 tests passing** across 13 test files
 
-- Project agent guidance and installed skills
-- SDD planning artifacts materialized in `docs/sdd/`
-- Phase 1 foundation setup
-- Initial Supabase schema and access migrations
-- Validation and Colombia timezone utilities with tests
+### Dev Setup
+
+1. Create a Supabase project and add credentials to `.env`
+2. Run migrations from `supabase/migrations/` in SQL Editor (001, 002, 003)
+3. Run `seed_demo_environment()` function in SQL Editor
+4. Disable email confirmation in Auth settings (dev only)
+5. `pnpm dev` — app runs at `http://localhost:5173`
+
+Demo credentials: `admin@demo.com` / `demo1234`
 
 ## Notes
 
-- Public routes are tenant-aware and use Barbershop slug paths
-- Admin access is authenticated and scoped by Barbershop membership
+- Public routes are tenant-aware and use Barbershop slug paths (`/b/:slug`)
+- Admin access is authenticated and scoped by Barbershop membership (`/admin/:slug/*`)
 - Future multitenancy and tenant theming are planned from day one
