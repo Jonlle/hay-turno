@@ -8,60 +8,6 @@
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
-@utility ht-btn-primary {
-  background-color: var(--ht-primary);
-  color: var(--ht-surface);
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-@utility ht-btn-primary:hover {
-  opacity: 0.9;
-}
-
-@utility ht-btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-@utility ht-btn-secondary {
-  background-color: var(--ht-accent);
-  color: var(--ht-primary);
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: opacity 0.15s;
-}
-
-@utility ht-btn-secondary:hover {
-  opacity: 0.9;
-}
-
-@utility ht-input {
-  width: 100%;
-  padding: 0.625rem 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.15s;
-}
-
-@utility ht-input:focus {
-  border-color: var(--ht-primary);
-}
-
-@utility ht-input:disabled {
-  background-color: #f3f4f6;
-  cursor: not-allowed;
-}
-
 @utility ht-chip-called {
   background-color: hsl(45 93% 47% / 0.15);
   color: hsl(35 90% 35%);
@@ -80,25 +26,81 @@
   font-weight: 600;
 }
 
-@utility ht-range-toggle {
-  display: flex;
-  gap: 0.25rem;
-  background-color: hsl(210 40% 96%);
-  border-radius: 0.5rem;
-  padding: 0.25rem;
-}
+@layer utilities {
+  .ht-btn-primary {
+    background-color: var(--ht-primary);
+    color: var(--ht-surface);
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
 
-@utility ht-range-toggle > button {
-  flex: 1;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
-}
+  .ht-btn-primary:hover {
+    opacity: 0.9;
+  }
 
-@utility ht-range-toggle > button.active {
-  background-color: var(--ht-surface);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  .ht-btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .ht-btn-secondary {
+    background-color: var(--ht-accent);
+    color: var(--ht-primary);
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .ht-btn-secondary:hover {
+    opacity: 0.9;
+  }
+
+  .ht-input {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .ht-input:focus {
+    border-color: var(--ht-primary);
+  }
+
+  .ht-input:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+  }
+
+  .ht-range-toggle {
+    display: flex;
+    gap: 0.25rem;
+    background-color: hsl(210 40% 96%);
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+  }
+
+  .ht-range-toggle > button {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .ht-range-toggle > button.active {
+    background-color: var(--ht-surface);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  }
 }

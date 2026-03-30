@@ -6,6 +6,7 @@ import {
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type PropsWithChildren,
 } from 'react';
@@ -14,6 +15,7 @@ import {
   getSupabaseBrowserClient,
   type HayTurnoSupabaseClient,
 } from '../services/supabase/client';
+import { seedDemoEnvironment } from '../services/supabase/seed';
 
 const queryClientOptions: DefaultOptions = {
   queries: {
@@ -44,6 +46,11 @@ export function AppProviders({
   supabaseClient = getSupabaseBrowserClient(),
 }: AppProvidersProps) {
   const [queryClient] = useState(createQueryClient);
+
+  // Seed demo environment in dev mode
+  useEffect(() => {
+    seedDemoEnvironment();
+  }, []);
 
   return (
     <SupabaseClientContext.Provider value={supabaseClient}>
