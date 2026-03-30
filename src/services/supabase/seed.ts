@@ -20,10 +20,13 @@ export async function seedDemoEnvironment(): Promise<void> {
   const supabase = getSupabaseBrowserClient();
 
   // Don't disrupt an existing developer session
-  const { data: existingSession } = await supabase.auth.getSession();
+  const { data: existingSession, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) {
+    console.error('[seed] Session check failed:', sessionError.message);
+    return;
+  }
   if (existingSession?.session) {
     console.log('[seed] Active session found, skipping seed.');
-    seeded = true;
     return;
   }
 
@@ -79,7 +82,6 @@ export async function seedDemoEnvironment(): Promise<void> {
 
   console.log('[seed] Demo environment ready:', {
     email: DEMO_ADMIN_EMAIL,
-    password: DEMO_ADMIN_PASSWORD,
     barbershop: 'demo',
   });
 
