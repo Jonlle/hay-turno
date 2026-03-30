@@ -7,17 +7,25 @@ let seeded = false;
 
 /**
  * Seed demo environment for development.
- * 1. Tries sign-in first (user exists? → get ID)
- * 2. If not, signs up (creates user)
- * 3. Calls seed_demo_admin RPC to create profile + membership
+ * 1. Checks for existing developer session (skips if logged in)
+ * 2. Tries sign-in first (user exists? → get ID)
+ * 3. If not, signs up (creates user)
+ * 4. Calls seed_demo_admin RPC to create profile + membership
  *
  * Only runs in dev mode. Idempotent.
  */
 export async function seedDemoEnvironment(): Promise<void> {
   if (!import.meta.env.DEV || seeded) return;
-  seeded = true;
 
   const supabase = getSupabaseBrowserClient();
+
+  // Don't disrupt an existing developer session
+  const { data: existingSession } = await supabase.auth.getSession();
+  if (existingSession?.session) {
+    console.log('[seed] Active session found, skipping seed.');
+    seeded = true;
+    return;
+  }
 
   console.log('[seed] Checking demo environment...');
 
@@ -34,7 +42,7 @@ export async function seedDemoEnvironment(): Promise<void> {
     userId = signInData.user.id;
     await supabase.auth.signOut();
     console.log('[seed] Admin user exists.');
-  } else if (signInError?.message.includes('Invalid login credentials')) {
+  } else if (signInError?.code === 'invalid_credentials') {
     // User doesn't exist — create it
     console.log('[seed] Creating admin user...');
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -50,7 +58,7 @@ export async function seedDemoEnvironment(): Promise<void> {
     userId = signUpData.user.id;
     await supabase.auth.signOut();
   } else {
-    console.error('[seed] Unexpected auth error:', signInError?.message);
+    console.error('[seed] Unexpected auth error:', signInError?.code, signInError?.message);
     return;
   }
 
@@ -74,4 +82,7 @@ export async function seedDemoEnvironment(): Promise<void> {
     password: DEMO_ADMIN_PASSWORD,
     barbershop: 'demo',
   });
+
+  // Only mark as seeded after success (allows retry on failure)
+  seeded = true;
 }
