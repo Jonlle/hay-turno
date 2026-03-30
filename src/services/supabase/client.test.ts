@@ -19,6 +19,9 @@ afterEach(() => {
 
 describe('supabase browser client', () => {
   it('throws when required Supabase env vars are missing', async () => {
+    vi.stubEnv('VITE_SUPABASE_URL', '');
+    vi.stubEnv('VITE_SUPABASE_ANON_KEY', '');
+
     const { createSupabaseBrowserClient } = await loadClientModule();
 
     expect(() => createSupabaseBrowserClient()).toThrow(

@@ -60,7 +60,7 @@ export async function seedDemoEnvironment(): Promise<void> {
   }
 
   // 2. Create profile + membership via RPC
-  const { error: rpcError } = await supabase.rpc('seed_demo_admin', {
+  const { error: rpcError } = await (supabase as any).rpc('seed_demo_admin', {
     admin_user_id: userId,
   });
 
