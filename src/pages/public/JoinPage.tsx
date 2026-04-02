@@ -31,7 +31,7 @@ export function JoinPage() {
   });
 
   // Apply barbershop theme
-  useTheme(barbershop?.theme_settings as Record<string, string> | undefined);
+  useTheme(barbershop?.theme_settings);
 
   const {
     register,
