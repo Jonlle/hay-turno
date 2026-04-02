@@ -131,7 +131,7 @@ describe('AdminQueuePage', () => {
 
     expect(screen.getByText('Juan Perez')).toBeInTheDocument();
     expect(screen.getByText('Ana Rodriguez')).toBeInTheDocument();
-    expect(screen.getByText('Llamando')).toBeInTheDocument();
+    expect(screen.getByText('Atendiendo')).toBeInTheDocument();
     expect(screen.getByText('En espera')).toBeInTheDocument();
   });
 
