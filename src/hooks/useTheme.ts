@@ -9,7 +9,7 @@ export function useTheme(themeSettings: unknown) {
   useEffect(() => {
     if (!themeSettings || typeof themeSettings !== 'object') return;
 
-    const cssVars = getThemeCssVariables(themeSettings as Record<string, string>);
+    const cssVars = getThemeCssVariables(themeSettings);
 
     for (const [property, value] of Object.entries(cssVars)) {
       document.documentElement.style.setProperty(property, value);
