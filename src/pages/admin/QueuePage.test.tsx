@@ -37,6 +37,7 @@ const defaultAuthGuard = {
   membership: { id: 'mem-1', barbershop_id: 'shop-123', profile_id: 'user-123', role: 'owner' as const, created_at: '2025-01-01' },
   barbershopId: 'shop-123',
   barbershopName: 'Barbería Demo',
+  themeSettings: undefined,
   isAuthorized: true,
   isLoading: false,
   needsLogin: false,
@@ -142,5 +143,55 @@ describe('AdminQueuePage', () => {
 
     expect(screen.getByTestId('stats-link').getAttribute('href')).toBe('/admin/demo/stats');
     expect(screen.getByTestId('logout-button')).toBeInTheDocument();
+  });
+
+  it('enables Next button when current turn exists but queue is empty', () => {
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      currentCalled: {
+        id: 'turn-1',
+        barbershopId: 'shop-123',
+        turnNumber: 1,
+        clientName: 'Juan Perez',
+        source: 'walk-in',
+        status: 'called',
+        joinedAt: '2025-01-01T10:00:00Z',
+        calledAt: '2025-01-01T10:05:00Z',
+      },
+      waitingTurns: [],
+    });
+
+    renderPage();
+
+    expect(screen.getByTestId('next-button')).not.toBeDisabled();
+    expect(screen.getByText('Finalizar turno')).toBeInTheDocument();
+  });
+
+  it('shows cancel button on waiting turns', () => {
+    const mockCancelTurn = vi.fn();
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      waitingTurns: [
+        {
+          id: 'turn-2',
+          barbershopId: 'shop-123',
+          turnNumber: 2,
+          clientName: 'Ana Rodriguez',
+          source: 'remote',
+          status: 'waiting',
+          joinedAt: '2025-01-01T10:10:00Z',
+          calledAt: null,
+        },
+      ],
+      cancelTurn: mockCancelTurn,
+    });
+
+    renderPage();
+
+    const cancelButton = screen.getByTestId('cancel-turn-turn-2');
+    expect(cancelButton).toBeInTheDocument();
+    expect(cancelButton.getAttribute('aria-label')).toBe('Cancelar turno 2');
   });
 });
