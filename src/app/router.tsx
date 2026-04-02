@@ -15,6 +15,7 @@ export function AppRouter() {
         <Route path="/b/:slug/join" element={<JoinPage />} />
 
         {/* Admin routes */}
+        <Route path="/admin/:slug" element={<Navigate to="queue" replace />} />
         <Route path="/admin/:slug/login" element={<AdminLoginPage />} />
         <Route path="/admin/:slug/queue" element={<AdminQueuePage />} />
         <Route path="/admin/:slug/stats" element={<AdminStatsPage />} />

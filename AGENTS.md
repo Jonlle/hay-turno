@@ -128,7 +128,7 @@ Do not invent synonyms like `ticket`, `line`, `customerSlot`, or `appointment` f
 
 ## Project Structure
 
-```
+```text
 src/
 ├── app/
 │   ├── providers.tsx      # QueryClient + Supabase context

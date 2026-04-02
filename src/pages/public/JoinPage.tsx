@@ -9,6 +9,7 @@ import { getBarbershopBySlug } from '../../services/supabase/barbershops';
 import { joinQueueRemote } from '../../services/supabase/queue';
 import { queueKeys } from '../../hooks/usePublicQueue';
 import { useQuery } from '@tanstack/react-query';
+import { useTheme } from '../../hooks/useTheme';
 import { LoadingState } from '../../components/queue/LoadingState';
 import { NotFoundPage } from './NotFoundPage';
 
@@ -28,6 +29,9 @@ export function JoinPage() {
     queryFn: () => getBarbershopBySlug(slug),
     retry: false,
   });
+
+  // Apply barbershop theme
+  useTheme(barbershop?.theme_settings);
 
   const {
     register,

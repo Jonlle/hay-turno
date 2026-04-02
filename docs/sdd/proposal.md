@@ -58,7 +58,7 @@ Disable realtime/admin flows and fall back to read-only public Queue while rever
 
 ## Success Criteria
 
-- [ ] Public Queue and Remote join work without login
-- [ ] Walk-in, Next, and stats work for authenticated admin users
-- [ ] Queue updates sync across devices in ~1 second
-- [ ] Data model remains Barbershop-scoped and theme-ready
+- [x] Public Queue and Remote join work without login
+- [x] Walk-in, Next, and stats work for authenticated admin users
+- [x] Queue updates sync across devices in ~1 second
+- [x] Data model remains Barbershop-scoped and theme-ready
