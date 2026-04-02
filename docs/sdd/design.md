@@ -79,6 +79,6 @@ Critical first flows: anonymous join, Walk-in creation, Next race-safe behavior,
 
 ## Open Questions / Deferred Decisions
 
-- [ ] Whether admin login is email link only or email/password in MVP.
-- [ ] Whether cancelled Turns need a visible reason field now or later.
-- [ ] Whether stats should use SQL views or RPCs first; both remain compatible.
+- [x] Admin login: email/password implemented (not email link).
+- [ ] Cancelled Turns: no reason field — deferred to future iteration.
+- [x] Stats: implemented via service functions (`getAttendedStats`) — neither SQL views nor RPCs, but compatible with both if needed later.
