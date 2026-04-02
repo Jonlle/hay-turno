@@ -36,7 +36,7 @@ describe('turn schema validation', () => {
     });
 
     expect(result.success).toBe(false);
-    expect(result.error?.issues[0]?.message).toBe('Client name must contain at least 2 characters.');
+    expect(result.error?.issues[0]?.message).toBe('El nombre debe tener al menos 2 caracteres.');
   });
 
   it('rejects unsupported client name characters', () => {
@@ -47,7 +47,7 @@ describe('turn schema validation', () => {
 
     expect(result.success).toBe(false);
     expect(result.error?.issues[0]?.message).toBe(
-      'Client name can only contain letters, numbers, spaces, apostrophes, dots, and hyphens.',
+      'Solo se permiten letras, números, espacios, apóstrofes, puntos y guiones.',
     );
   });
 

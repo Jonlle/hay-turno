@@ -9,12 +9,12 @@ export type TurnStatus = (typeof TURN_STATUSES)[number];
 const clientNamePattern = /^[\p{L}\p{N}][\p{L}\p{N} '.-]*[\p{L}\p{N}]$/u;
 
 export const turnClientNameSchema = z
-  .string({ required_error: 'Client name is required.' })
+  .string({ required_error: 'El nombre es obligatorio.' })
   .trim()
-  .min(2, 'Client name must contain at least 2 characters.')
-  .max(60, 'Client name must contain at most 60 characters.')
+  .min(2, 'El nombre debe tener al menos 2 caracteres.')
+  .max(60, 'El nombre debe tener máximo 60 caracteres.')
   .refine((value) => clientNamePattern.test(value), {
-    message: 'Client name can only contain letters, numbers, spaces, apostrophes, dots, and hyphens.',
+    message: 'Solo se permiten letras, números, espacios, apóstrofes, puntos y guiones.',
   });
 
 export const remoteTurnSchema = z.object({
