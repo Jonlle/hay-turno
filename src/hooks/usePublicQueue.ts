@@ -46,6 +46,7 @@ export function usePublicQueue(slug: string) {
 
   return {
     barbershopId,
+    themeSettings: barbershopQuery.data?.theme_settings as Record<string, string> | undefined,
     queueState,
     isLoading: barbershopQuery.isLoading || queueQuery.isLoading,
     notFound: !barbershopQuery.isLoading && !barbershopQuery.data,

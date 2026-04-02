@@ -8,7 +8,7 @@ export function LoadingState() {
       role="status"
       aria-live="polite"
     >
-      <Loader2 className="w-8 h-8 animate-spin text-[var(--ht-primary)]" />
+      <Loader2 className="w-8 h-8 animate-spin text-(--ht-primary)" />
       <p className="text-sm text-gray-500">Cargando...</p>
     </div>
   );

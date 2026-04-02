@@ -35,6 +35,7 @@ const authorizedGuard = {
   membership: { id: 'mem-1', barbershop_id: 'shop-123', profile_id: 'user-123', role: 'owner' as const, created_at: '2025-01-01' },
   barbershopId: 'shop-123',
   barbershopName: 'Barbería Demo',
+  themeSettings: undefined,
   isAuthorized: true,
   isLoading: false,
   needsLogin: false,

@@ -15,6 +15,7 @@ export interface AuthGuardResult {
   membership: MembershipRow | null;
   barbershopId: string | undefined;
   barbershopName: string | undefined;
+  themeSettings: Record<string, string> | undefined;
   isAuthorized: boolean;
   isLoading: boolean;
   needsLogin: boolean;
@@ -70,6 +71,7 @@ export function useAuthGuard(slug: string): AuthGuardResult {
     membership: membershipQuery.data ?? null,
     barbershopId,
     barbershopName: barbershopQuery.data?.name,
+    themeSettings: barbershopQuery.data?.theme_settings as Record<string, string> | undefined,
     isAuthorized,
     isLoading,
     needsLogin,

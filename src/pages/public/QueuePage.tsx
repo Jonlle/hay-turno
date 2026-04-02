@@ -1,13 +1,17 @@
 import { useParams, Link } from 'react-router-dom';
 import { usePublicQueue } from '../../hooks/usePublicQueue';
 import { useQueueRealtime } from '../../hooks/useQueueRealtime';
+import { useTheme } from '../../hooks/useTheme';
 import { QueueBoard } from '../../components/queue/QueueBoard';
 import { LoadingState } from '../../components/queue/LoadingState';
 import { NotFoundPage } from './NotFoundPage';
 
 export function PublicQueuePage() {
   const { slug = '' } = useParams<{ slug: string }>();
-  const { barbershopId, queueState, isLoading, notFound } = usePublicQueue(slug);
+  const { barbershopId, themeSettings, queueState, isLoading, notFound } = usePublicQueue(slug);
+
+  // Apply barbershop theme
+  useTheme(themeSettings);
 
   // Subscribe to realtime changes
   useQueueRealtime({ barbershopId, slug });
@@ -48,7 +52,7 @@ export function PublicQueuePage() {
 
 function Header({ name }: { name: string }) {
   return (
-    <header className="bg-[var(--ht-primary)] text-[var(--ht-surface)] px-4 py-4">
+    <header className="bg-(--ht-primary) text-(--ht-surface) px-4 py-4">
       <div className="max-w-lg mx-auto">
         <h1 className="text-xl font-bold">{name}</h1>
         <p className="text-xs opacity-75 mt-1">HayTurno</p>

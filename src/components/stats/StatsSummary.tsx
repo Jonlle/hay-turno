@@ -15,7 +15,7 @@ export function StatsSummary({ stats, range }: StatsSummaryProps) {
       {/* Total cards */}
       <div className="grid grid-cols-3 gap-3">
         <div className="ht-card text-center">
-          <p className="text-2xl font-bold text-[var(--ht-primary)]">{total}</p>
+          <p className="text-2xl font-bold text-(--ht-primary)">{total}</p>
           <p className="text-xs text-gray-500 mt-1">Total</p>
         </div>
         <div className="ht-card text-center">
