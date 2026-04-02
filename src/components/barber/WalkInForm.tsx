@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { turnClientNameSchema } from '../../schemas/turn';
@@ -30,11 +30,18 @@ export function WalkInForm({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<WalkInFormData>({
     resolver: zodResolver(walkInFormSchema),
     defaultValues: { clientName: defaultName },
   });
+
+  // Sync defaultName when it changes (only if user hasn't typed)
+  useEffect(() => {
+    if (!isDirty) {
+      reset({ clientName: defaultName });
+    }
+  }, [defaultName, isDirty, reset]);
 
   const handleFormSubmit = (data: WalkInFormData) => {
     onSubmit(data.clientName);
