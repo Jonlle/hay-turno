@@ -32,4 +32,4 @@
 
 ## Summary
 
-All 17 tasks complete. **73 tests passing** across 13 test files. MVP functional: public queue, remote join, admin login, walk-in, next, stats, realtime, and dev seed environment.
+All 17 tasks complete. **75 tests passing** across 13 test files. MVP functional with polish: public queue, remote join, admin login, walk-in, next (including finish without queue), cancel turn, stats, realtime, theme customization, dev seed environment, and neutral Colombian Spanish.

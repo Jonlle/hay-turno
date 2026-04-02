@@ -11,9 +11,8 @@ Documentation and planning artifacts for HayTurno live here.
 ## Structure
 
 - `sdd/` — proposal, design, spec, and tasks artifacts
+- `diagrams/` — flow diagrams, architecture, realtime sync, and navigation structure
 
 ## Notes
 
-- The repository is still in the planning/bootstrap stage
-- Some early SDD artifacts may also exist in Engram persistent memory
-- As artifacts are materialized into files, this directory becomes the source visible to the team
+- The repository is in active development — MVP is complete and polished
