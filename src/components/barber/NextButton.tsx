@@ -1,4 +1,4 @@
-import { SkipForward } from 'lucide-react';
+import { SkipForward, Check } from 'lucide-react';
 
 interface NextButtonProps {
   onClick: () => void;
@@ -13,16 +13,22 @@ export function NextButton({
   isPending,
   hasWaitingTurns,
 }: NextButtonProps) {
+  const Icon = hasWaitingTurns ? SkipForward : Check;
+
   return (
     <button
       onClick={onClick}
-      disabled={isDisabled || isPending || !hasWaitingTurns}
+      disabled={isDisabled || isPending}
       className="ht-btn-primary w-full flex items-center justify-center gap-2 py-4 text-lg"
       data-testid="next-button"
-      aria-label="Siguiente turno"
+      aria-label={hasWaitingTurns ? 'Siguiente turno' : 'Finalizar turno'}
     >
-      <SkipForward className="w-5 h-5" />
-      {isPending ? 'Avanzando...' : 'Siguiente'}
+      <Icon className="w-5 h-5" />
+      {isPending
+        ? 'Procesando...'
+        : hasWaitingTurns
+          ? 'Llamar siguiente'
+          : 'Finalizar turno'}
     </button>
   );
 }

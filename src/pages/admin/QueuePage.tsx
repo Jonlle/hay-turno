@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
 import { useAdminQueue } from '../../hooks/useAdminQueue';
 import { useQueueRealtime } from '../../hooks/useQueueRealtime';
+import { useTheme } from '../../hooks/useTheme';
 import { QueueBoard } from '../../components/queue/QueueBoard';
 import { LoadingState } from '../../components/queue/LoadingState';
 import { WalkInForm } from '../../components/barber/WalkInForm';
@@ -21,10 +22,14 @@ export function AdminQueuePage() {
     membership,
     barbershopId,
     barbershopName,
+    themeSettings,
     isAuthorized,
     isLoading: authLoading,
     needsLogin,
   } = useAuthGuard(slug);
+
+  // Apply barbershop theme
+  useTheme(themeSettings);
 
   // Subscribe to realtime changes
   useQueueRealtime({ barbershopId });
@@ -39,6 +44,7 @@ export function AdminQueuePage() {
     walkInError,
     callNext,
     isCallingNext,
+    cancelTurn,
   } = useAdminQueue(barbershopId);
 
   const logoutMutation = useMutation({
@@ -111,12 +117,13 @@ export function AdminQueuePage() {
             currentCalled,
             waitingTurns,
           }}
+          onCancel={(turnId) => cancelTurn(turnId)}
         />
 
         {/* Next button */}
         <NextButton
           onClick={() => callNext()}
-          isDisabled={!currentCalled && waitingTurns.length === 0}
+          isDisabled={!currentCalled}
           isPending={isCallingNext}
           hasWaitingTurns={waitingTurns.length > 0}
         />
@@ -131,7 +138,7 @@ export function AdminQueuePage() {
         {/* Stats link */}
         <Link
           to={`/admin/${slug}/stats`}
-          className="ht-btn-secondary block text-center flex items-center justify-center gap-2"
+          className="ht-btn-secondary text-center flex items-center justify-center gap-2"
           data-testid="stats-link"
         >
           <BarChart3 className="w-4 h-4" />
@@ -149,7 +156,7 @@ interface AdminHeaderProps {
 
 function AdminHeader({ name, onLogout }: AdminHeaderProps) {
   return (
-    <header className="bg-[var(--ht-primary)] text-[var(--ht-surface)] px-4 py-4">
+    <header className="bg-(--ht-primary) text-(--ht-surface) px-4 py-4">
       <div className="max-w-lg mx-auto flex items-center justify-between">
         <div>
           <h1 className="text-lg font-bold">{name}</h1>
@@ -157,7 +164,7 @@ function AdminHeader({ name, onLogout }: AdminHeaderProps) {
         </div>
         <button
           onClick={onLogout}
-          className="text-[var(--ht-surface)] opacity-75 hover:opacity-100 p-2"
+          className="text-(--ht-surface) opacity-75 hover:opacity-100 p-2"
           aria-label="Cerrar sesión"
           data-testid="logout-button"
         >
