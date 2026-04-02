@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
 import { useAdminUiStore } from '../../stores/adminUi';
+import { useTheme } from '../../hooks/useTheme';
 import { AdminStatsView } from '../../components/barber/AdminStatsView';
 import { LoadingState } from '../../components/queue/LoadingState';
 import { ArrowLeft } from 'lucide-react';
@@ -14,10 +15,14 @@ export function AdminStatsPage() {
   const {
     barbershopId,
     barbershopName,
+    themeSettings,
     isAuthorized,
     isLoading,
     needsLogin,
   } = useAuthGuard(slug);
+
+  // Apply barbershop theme
+  useTheme(themeSettings);
 
   // Redirect if login needed
   useEffect(() => {
@@ -48,7 +53,7 @@ export function AdminStatsPage() {
         <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
           <div className="ht-card text-center py-8">
             <p className="text-sm text-gray-500">
-              No tenés permisos para acceder a esta barbería.
+              No tienes permisos para acceder a esta barbería.
             </p>
           </div>
         </main>
@@ -82,7 +87,7 @@ export function AdminStatsPage() {
 
 function StatsHeader({ name }: { name: string }) {
   return (
-    <header className="bg-[var(--ht-primary)] text-[var(--ht-surface)] px-4 py-4">
+    <header className="bg-(--ht-primary) text-(--ht-surface) px-4 py-4">
       <div className="max-w-lg mx-auto">
         <h1 className="text-lg font-bold">Estadísticas</h1>
         <p className="text-xs opacity-75 mt-1">{name}</p>

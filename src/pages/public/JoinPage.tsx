@@ -73,7 +73,7 @@ export function JoinPage() {
         <div className="ht-card">
           <h2 className="text-lg font-bold mb-1">{barbershop.name}</h2>
           <p className="text-sm text-gray-500">
-            Completá tus datos para unirte a la cola
+            Completa tus datos para unirte a la cola
           </p>
         </div>
 
@@ -107,7 +107,7 @@ export function JoinPage() {
 
           {joinMutation.error && (
             <p className="text-red-500 text-xs" role="alert">
-              No se pudo unir a la cola. Intentá de nuevo.
+              No se pudo unir a la cola. Intenta de nuevo.
             </p>
           )}
 
@@ -137,7 +137,7 @@ export function JoinPage() {
 
 function JoinHeader() {
   return (
-    <header className="bg-[var(--ht-primary)] text-[var(--ht-surface)] px-4 py-4">
+    <header className="bg-(--ht-primary) text-(--ht-surface) px-4 py-4">
       <div className="max-w-lg mx-auto">
         <h1 className="text-xl font-bold">Unirse a la cola</h1>
         <p className="text-xs opacity-75 mt-1">HayTurno</p>

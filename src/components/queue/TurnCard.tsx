@@ -1,11 +1,13 @@
 import type { TurnItem } from '../../types';
+import { X } from 'lucide-react';
 
 interface TurnCardProps {
   turn: TurnItem;
   isCurrent?: boolean;
+  onCancel?: (turnId: string) => void;
 }
 
-export function TurnCard({ turn, isCurrent = false }: TurnCardProps) {
+export function TurnCard({ turn, isCurrent = false, onCancel }: TurnCardProps) {
   return (
     <div
       className={`ht-card flex items-center justify-between ${
@@ -14,7 +16,7 @@ export function TurnCard({ turn, isCurrent = false }: TurnCardProps) {
       data-testid={`turn-card-${turn.id}`}
     >
       <div className="flex items-center gap-3">
-        <span className="text-2xl font-bold text-[var(--ht-primary)]">
+        <span className="text-2xl font-bold text-(--ht-primary)">
           #{turn.turnNumber}
         </span>
         <div>
@@ -24,13 +26,25 @@ export function TurnCard({ turn, isCurrent = false }: TurnCardProps) {
           </p>
         </div>
       </div>
-      <span
-        className={
-          turn.status === 'called' ? 'ht-chip-called' : 'ht-chip-waiting'
-        }
-      >
-        {turn.status === 'called' ? 'Llamando' : 'En espera'}
-      </span>
+      <div className="flex items-center gap-2">
+        <span
+          className={
+            turn.status === 'called' ? 'ht-chip-called' : 'ht-chip-waiting'
+          }
+        >
+          {turn.status === 'called' ? 'Llamando' : 'En espera'}
+        </span>
+        {onCancel && turn.status === 'waiting' && (
+          <button
+            onClick={() => onCancel(turn.id)}
+            className="text-gray-400 hover:text-red-500 p-1 rounded transition-colors"
+            aria-label={`Cancelar turno ${turn.turnNumber}`}
+            data-testid={`cancel-turn-${turn.id}`}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

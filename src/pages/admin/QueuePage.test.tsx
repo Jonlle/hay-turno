@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -37,6 +37,7 @@ const defaultAuthGuard = {
   membership: { id: 'mem-1', barbershop_id: 'shop-123', profile_id: 'user-123', role: 'owner' as const, created_at: '2025-01-01' },
   barbershopId: 'shop-123',
   barbershopName: 'Barbería Demo',
+  themeSettings: undefined,
   isAuthorized: true,
   isLoading: false,
   needsLogin: false,
@@ -95,7 +96,7 @@ describe('AdminQueuePage', () => {
 
     renderPage();
 
-    expect(screen.getByText('No tenés permisos para acceder a esta barbería.')).toBeInTheDocument();
+    expect(screen.getByText('No tienes permisos para acceder a esta barbería.')).toBeInTheDocument();
   });
 
   it('renders turns in the queue', () => {
@@ -142,5 +143,58 @@ describe('AdminQueuePage', () => {
 
     expect(screen.getByTestId('stats-link').getAttribute('href')).toBe('/admin/demo/stats');
     expect(screen.getByTestId('logout-button')).toBeInTheDocument();
+  });
+
+  it('enables Next button when current turn exists but queue is empty', () => {
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      currentCalled: {
+        id: 'turn-1',
+        barbershopId: 'shop-123',
+        turnNumber: 1,
+        clientName: 'Juan Perez',
+        source: 'walk-in',
+        status: 'called',
+        joinedAt: '2025-01-01T10:00:00Z',
+        calledAt: '2025-01-01T10:05:00Z',
+      },
+      waitingTurns: [],
+    });
+
+    renderPage();
+
+    expect(screen.getByTestId('next-button')).not.toBeDisabled();
+    expect(screen.getByText('Finalizar turno')).toBeInTheDocument();
+  });
+
+  it('shows cancel button on waiting turns', () => {
+    const mockCancelTurn = vi.fn();
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      waitingTurns: [
+        {
+          id: 'turn-2',
+          barbershopId: 'shop-123',
+          turnNumber: 2,
+          clientName: 'Ana Rodriguez',
+          source: 'remote',
+          status: 'waiting',
+          joinedAt: '2025-01-01T10:10:00Z',
+          calledAt: null,
+        },
+      ],
+      cancelTurn: mockCancelTurn,
+    });
+
+    renderPage();
+
+    const cancelButton = screen.getByTestId('cancel-turn-turn-2');
+    expect(cancelButton).toBeInTheDocument();
+    expect(cancelButton.getAttribute('aria-label')).toBe('Cancelar turno 2');
+
+    fireEvent.click(cancelButton);
+    expect(mockCancelTurn).toHaveBeenCalledWith('turn-2');
   });
 });

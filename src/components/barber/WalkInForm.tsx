@@ -64,7 +64,7 @@ export function WalkInForm({
 
       {error && (
         <p className="text-red-500 text-xs" role="alert">
-          No se pudo registrar. Intentá de nuevo.
+          No se pudo registrar. Intenta de nuevo.
         </p>
       )}
 

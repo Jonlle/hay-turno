@@ -31,6 +31,7 @@ describe('PublicQueuePage', () => {
   it('renders loading state while fetching', () => {
     mockUsePublicQueue.mockReturnValue({
       barbershopId: undefined,
+      themeSettings: undefined,
       queueState: null,
       isLoading: true,
       notFound: false,
@@ -46,6 +47,7 @@ describe('PublicQueuePage', () => {
   it('renders not found page when slug is invalid', () => {
     mockUsePublicQueue.mockReturnValue({
       barbershopId: undefined,
+      themeSettings: undefined,
       queueState: null,
       isLoading: false,
       notFound: true,
@@ -61,6 +63,7 @@ describe('PublicQueuePage', () => {
   it('renders queue board with barbershop name', () => {
     mockUsePublicQueue.mockReturnValue({
       barbershopId: 'shop-123',
+      themeSettings: { primary: '#333' },
       queueState: {
         barbershopName: 'Barbería Demo',
         barbershopSlug: 'demo',
@@ -106,6 +109,7 @@ describe('PublicQueuePage', () => {
   it('shows empty state when no waiting turns', () => {
     mockUsePublicQueue.mockReturnValue({
       barbershopId: 'shop-123',
+      themeSettings: undefined,
       queueState: {
         barbershopName: 'Barbería Demo',
         barbershopSlug: 'demo',

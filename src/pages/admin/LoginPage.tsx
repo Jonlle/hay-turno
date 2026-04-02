@@ -43,7 +43,7 @@ export function AdminLoginPage() {
     },
     onError: () => {
       setError('root', {
-        message: 'Credenciales incorrectas. Verificá tu email y contraseña.',
+        message: 'Credenciales incorrectas. Verifica tu email y contraseña.',
       });
     },
   });
@@ -81,7 +81,7 @@ export function AdminLoginPage() {
       <main className="flex-1 px-4 py-6 max-w-md mx-auto w-full space-y-6">
         <div className="ht-card">
           <p className="text-sm text-gray-500">
-            Ingresá con tu cuenta de administrador para gestionar la cola.
+            Ingresa con tu cuenta de administrador para gestionar la cola.
           </p>
         </div>
 
@@ -157,7 +157,7 @@ export function AdminLoginPage() {
 
 function AdminHeader({ title }: { title: string }) {
   return (
-    <header className="bg-[var(--ht-primary)] text-[var(--ht-surface)] px-4 py-4">
+    <header className="bg-(--ht-primary) text-(--ht-surface) px-4 py-4">
       <div className="max-w-md mx-auto">
         <h1 className="text-xl font-bold">{title}</h1>
         <p className="text-xs opacity-75 mt-1">HayTurno Admin</p>

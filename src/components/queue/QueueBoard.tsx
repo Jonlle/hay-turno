@@ -3,9 +3,10 @@ import { TurnCard } from './TurnCard';
 
 interface QueueBoardProps {
   queueState: QueueState;
+  onCancel?: (turnId: string) => void;
 }
 
-export function QueueBoard({ queueState }: QueueBoardProps) {
+export function QueueBoard({ queueState, onCancel }: QueueBoardProps) {
   const { currentCalled, waitingTurns } = queueState;
 
   return (
@@ -37,7 +38,7 @@ export function QueueBoard({ queueState }: QueueBoardProps) {
         ) : (
           <div className="space-y-2">
             {waitingTurns.map((turn) => (
-              <TurnCard key={turn.id} turn={turn} />
+              <TurnCard key={turn.id} turn={turn} onCancel={onCancel} />
             ))}
           </div>
         )}

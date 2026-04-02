@@ -34,6 +34,7 @@ const defaultAuthGuard = {
   membership: null,
   barbershopId: undefined,
   barbershopName: undefined,
+  themeSettings: undefined,
   isAuthorized: false,
   isLoading: false,
   needsLogin: false,
