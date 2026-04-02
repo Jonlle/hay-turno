@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LogIn } from 'lucide-react';
 import { signInWithEmail } from '../../services/supabase/auth';
 import { useAuthGuard } from '../../hooks/useAuthGuard';
+import { useTheme } from '../../hooks/useTheme';
 import { LoadingState } from '../../components/queue/LoadingState';
 
 const loginFormSchema = z.object({
@@ -20,7 +21,10 @@ export function AdminLoginPage() {
   const { slug = '' } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isAuthorized, isLoading, needsLogin } = useAuthGuard(slug);
+  const { isAuthorized, isLoading, needsLogin, themeSettings } = useAuthGuard(slug);
+
+  // Apply barbershop theme
+  useTheme(themeSettings);
 
   const {
     register,
