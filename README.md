@@ -45,19 +45,22 @@ pnpm typecheck    # TypeScript type checking
 - [docs/sdd/design.md](docs/sdd/design.md) — technical design
 - [docs/sdd/spec.md](docs/sdd/spec.md) — functional and non-functional specification
 - [docs/sdd/tasks.md](docs/sdd/tasks.md) — implementation task breakdown
+- [docs/diagrams/README.md](docs/diagrams/README.md) — flow and architecture diagrams
 - [.atl/skill-registry.md](.atl/skill-registry.md) — installed skills registry
 
 ## Current Status
 
-**MVP fully implemented.** All 17 tasks across 4 phases complete.
+**MVP fully implemented and polished.** All 17 tasks across 4 phases complete.
 
 - Data services: barbershops, queue, auth, memberships, stats, realtime
 - Public UI: queue board, remote join form, not-found page
-- Admin UI: login, queue control (walk-in + next), day/week/month stats
+- Admin UI: login, queue control (walk-in, next, cancel turn), day/week/month stats
 - Realtime subscriptions for live queue updates
 - Colombia timezone-aware stats aggregation
+- Per-barbershop theme customization (CSS variables)
 - Dev seed environment (auto-creates demo barbershop + admin on startup)
-- **73 tests passing** across 13 test files
+- Neutral Colombian Spanish throughout
+- **75 tests passing** across 13 test files
 
 ### Dev Setup
 
