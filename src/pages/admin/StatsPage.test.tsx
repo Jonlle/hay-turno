@@ -70,7 +70,7 @@ describe('AdminStatsPage', () => {
 
     renderPage();
 
-    expect(screen.getByText('No tenés permisos para acceder a esta barbería.')).toBeInTheDocument();
+    expect(screen.getByText('No tienes permisos para acceder a esta barbería.')).toBeInTheDocument();
   });
 
   it('has back link to queue', () => {

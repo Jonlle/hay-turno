@@ -53,7 +53,7 @@ export function AdminStatsPage() {
         <main className="flex-1 px-4 py-6 max-w-lg mx-auto w-full">
           <div className="ht-card text-center py-8">
             <p className="text-sm text-gray-500">
-              No tenés permisos para acceder a esta barbería.
+              No tienes permisos para acceder a esta barbería.
             </p>
           </div>
         </main>

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import '@testing-library/jest-dom/vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -96,7 +96,7 @@ describe('AdminQueuePage', () => {
 
     renderPage();
 
-    expect(screen.getByText('No tenés permisos para acceder a esta barbería.')).toBeInTheDocument();
+    expect(screen.getByText('No tienes permisos para acceder a esta barbería.')).toBeInTheDocument();
   });
 
   it('renders turns in the queue', () => {
@@ -193,5 +193,8 @@ describe('AdminQueuePage', () => {
     const cancelButton = screen.getByTestId('cancel-turn-turn-2');
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton.getAttribute('aria-label')).toBe('Cancelar turno 2');
+
+    fireEvent.click(cancelButton);
+    expect(mockCancelTurn).toHaveBeenCalledWith('turn-2');
   });
 });
