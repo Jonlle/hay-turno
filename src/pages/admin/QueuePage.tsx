@@ -123,8 +123,9 @@ export function AdminQueuePage() {
         {/* Next button */}
         <NextButton
           onClick={() => callNext()}
-          isDisabled={!currentCalled}
+          isDisabled={!currentCalled && waitingTurns.length === 0}
           isPending={isCallingNext}
+          hasCurrentTurn={!!currentCalled}
           hasWaitingTurns={waitingTurns.length > 0}
         />
 
@@ -132,6 +133,7 @@ export function AdminQueuePage() {
         <WalkInForm
           onSubmit={handleWalkIn}
           isSubmitting={isAddingWalkIn}
+          defaultName={`Cliente ${turns.length + 1}`}
           error={walkInError}
         />
 

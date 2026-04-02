@@ -131,7 +131,7 @@ describe('AdminQueuePage', () => {
 
     expect(screen.getByText('Juan Perez')).toBeInTheDocument();
     expect(screen.getByText('Ana Rodriguez')).toBeInTheDocument();
-    expect(screen.getByText('Llamando')).toBeInTheDocument();
+    expect(screen.getByText('Atendiendo')).toBeInTheDocument();
     expect(screen.getByText('En espera')).toBeInTheDocument();
   });
 
@@ -166,6 +166,47 @@ describe('AdminQueuePage', () => {
 
     expect(screen.getByTestId('next-button')).not.toBeDisabled();
     expect(screen.getByText('Finalizar turno')).toBeInTheDocument();
+  });
+
+  it('enables Next button when waiting turns exist but no current turn', () => {
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      currentCalled: null,
+      waitingTurns: [
+        {
+          id: 'turn-1',
+          barbershopId: 'shop-123',
+          turnNumber: 1,
+          clientName: 'Ana Rodriguez',
+          source: 'remote',
+          status: 'waiting',
+          joinedAt: '2025-01-01T10:00:00Z',
+          calledAt: null,
+        },
+      ],
+    });
+
+    renderPage();
+
+    expect(screen.getByTestId('next-button')).not.toBeDisabled();
+    expect(screen.getByText('Atender siguiente')).toBeInTheDocument();
+  });
+
+  it('shows default walk-in name based on turn count', () => {
+    mockUseAuthGuard.mockReturnValue(defaultAuthGuard);
+    mockUseAdminQueue.mockReturnValue({
+      ...defaultAdminQueue,
+      turns: [
+        { id: 't1', turnNumber: 1 } as any,
+        { id: 't2', turnNumber: 2 } as any,
+      ],
+    });
+
+    renderPage();
+
+    const input = screen.getByTestId('walk-in-name-input') as HTMLInputElement;
+    expect(input.value).toBe('Cliente 3');
   });
 
   it('shows cancel button on waiting turns', () => {

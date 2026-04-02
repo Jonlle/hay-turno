@@ -1,3 +1,4 @@
+import { useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { turnClientNameSchema } from '../../schemas/turn';
@@ -13,26 +14,46 @@ type WalkInFormData = z.infer<typeof walkInFormSchema>;
 interface WalkInFormProps {
   onSubmit: (clientName: string) => void;
   isSubmitting: boolean;
+  defaultName?: string;
   error?: Error | null;
 }
 
 export function WalkInForm({
   onSubmit,
   isSubmitting,
+  defaultName = '',
   error,
 }: WalkInFormProps) {
+  const selectedOnce = useRef(false);
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<WalkInFormData>({
     resolver: zodResolver(walkInFormSchema),
+    defaultValues: { clientName: defaultName },
   });
+
+  // Sync defaultName when it changes (only if user hasn't typed)
+  useEffect(() => {
+    if (!isDirty) {
+      reset({ clientName: defaultName });
+    }
+  }, [defaultName, isDirty, reset]);
 
   const handleFormSubmit = (data: WalkInFormData) => {
     onSubmit(data.clientName);
-    reset();
+    reset({ clientName: defaultName });
+    selectedOnce.current = false;
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (!selectedOnce.current) {
+      e.target.select();
+      selectedOnce.current = true;
+    }
   };
 
   return (
@@ -54,6 +75,7 @@ export function WalkInForm({
           disabled={isSubmitting}
           aria-label="Nombre del cliente"
           data-testid="walk-in-name-input"
+          onFocus={handleFocus}
         />
         {errors.clientName && (
           <p className="text-red-500 text-xs mt-1" role="alert">

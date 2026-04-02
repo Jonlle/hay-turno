@@ -32,7 +32,7 @@ export function TurnCard({ turn, isCurrent = false, onCancel }: TurnCardProps) {
             turn.status === 'called' ? 'ht-chip-called' : 'ht-chip-waiting'
           }
         >
-          {turn.status === 'called' ? 'Llamando' : 'En espera'}
+          {turn.status === 'called' ? 'Atendiendo' : 'En espera'}
         </span>
         {onCancel && turn.status === 'waiting' && (
           <button
