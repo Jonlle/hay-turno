@@ -1,4 +1,4 @@
-import { SkipForward, Check, Minus } from 'lucide-react';
+import { SkipForward, Check } from 'lucide-react';
 
 interface NextButtonProps {
   onClick: () => void;
@@ -15,13 +15,9 @@ export function NextButton({
   hasCurrentTurn,
   hasWaitingTurns,
 }: NextButtonProps) {
-  const label = hasWaitingTurns
-    ? 'Llamar siguiente'
-    : hasCurrentTurn
-      ? 'Finalizar turno'
-      : 'Sin turnos';
-
-  const Icon = hasWaitingTurns ? SkipForward : hasCurrentTurn ? Check : Minus;
+  const isFinalizar = hasCurrentTurn && !hasWaitingTurns;
+  const label = isFinalizar ? 'Finalizar turno' : 'Atender siguiente';
+  const Icon = isFinalizar ? Check : SkipForward;
 
   return (
     <button
