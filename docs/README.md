@@ -11,8 +11,9 @@ Documentation and planning artifacts for HayTurno live here.
 ## Structure
 
 - `sdd/` — proposal, design, spec, and tasks artifacts
+- `sdd/proposal-phase5-whatsapp.md` — Phase 5: WhatsApp Bot integration proposal
 - `diagrams/` — flow diagrams, architecture, realtime sync, and navigation structure
 
 ## Notes
 
-- The repository is in active development — MVP is complete and polished
+- MVP is complete and deployed: https://hayturno.vercel.app/b/demo
