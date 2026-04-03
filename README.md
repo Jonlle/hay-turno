@@ -45,12 +45,15 @@ pnpm typecheck    # TypeScript type checking
 - [docs/sdd/design.md](docs/sdd/design.md) — technical design
 - [docs/sdd/spec.md](docs/sdd/spec.md) — functional and non-functional specification
 - [docs/sdd/tasks.md](docs/sdd/tasks.md) — implementation task breakdown
+- [docs/sdd/proposal-phase5-whatsapp.md](docs/sdd/proposal-phase5-whatsapp.md) — Phase 5: WhatsApp Bot proposal
 - [docs/diagrams/README.md](docs/diagrams/README.md) — flow and architecture diagrams
 - [.atl/skill-registry.md](.atl/skill-registry.md) — installed skills registry
 
 ## Current Status
 
 **MVP fully implemented and polished.** All 17 tasks across 4 phases complete.
+
+🌐 **Production**: <https://hayturno.vercel.app/b/demo>
 
 - Data services: barbershops, queue, auth, memberships, stats, realtime
 - Public UI: queue board, remote join form, not-found page
@@ -60,7 +63,7 @@ pnpm typecheck    # TypeScript type checking
 - Per-barbershop theme customization (CSS variables)
 - Dev seed environment (auto-creates demo barbershop + admin on startup)
 - Neutral Colombian Spanish throughout
-- **75 tests passing** across 13 test files
+- **77 tests passing** across 13 test files
 
 ### Dev Setup
 
