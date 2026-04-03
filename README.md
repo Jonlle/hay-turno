@@ -53,7 +53,7 @@ pnpm typecheck    # TypeScript type checking
 
 **MVP fully implemented and polished.** All 17 tasks across 4 phases complete.
 
-🌐 **Production**: https://hayturno.vercel.app/b/demo
+🌐 **Production**: <https://hayturno.vercel.app/b/demo>
 
 - Data services: barbershops, queue, auth, memberships, stats, realtime
 - Public UI: queue board, remote join form, not-found page
