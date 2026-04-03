@@ -8,7 +8,7 @@ Enable clients to check their queue status and receive real-time updates via Wha
 
 ### In Scope
 
-- Meta Cloud API integration (free tier: 1,000 service conversations/month)
+- Meta Cloud API integration (free tier: 1,000 service conversations/month — **as of 2026-04-02, per Meta WhatsApp Business Platform docs; verify current pricing before implementation**)
 - Webhook handler for incoming WhatsApp messages
 - Phone number matching to active turns in the queue
 - Automated keyword-based responses:
@@ -32,7 +32,7 @@ Use **Meta Cloud API** (official WhatsApp API) with a **Vercel Serverless Functi
 2. Queries the `turns` table for an active turn matching that phone number.
 3. Responds with the current queue status using the WhatsApp Send API.
 
-Phone numbers will be collected during the Remote join flow (optional field initially, then required for WhatsApp features).
+Phone numbers will be collected during the Remote join flow (optional field initially, then required for WhatsApp features). **Data lifecycle: phone numbers are retained for 90 days after a turn is completed, then anonymized. Users may request deletion at any time. Phone data is never logged in plaintext — masked in audit trails and error logs. Only the barbershop owner and HayTurno admins can access raw phone data.**
 
 ## Explicit Decisions
 
@@ -62,13 +62,19 @@ Phone numbers will be collected during the Remote join flow (optional field init
 
 ## Rollback Plan
 
-Disable the webhook endpoint in Vercel/Supabase. Remove the `phone` column from `turns`. Revert admin settings UI. No data loss — phone numbers are optional.
+1. Disable the webhook endpoint in Vercel/Supabase.
+2. **Backup**: Export `turns.phone` to CSV or create `turns_phone_backup` table before any schema changes.
+3. **Non-destructive migration**: Make `turns.phone` nullable or add a `phone_deprecated` flag — do NOT drop the column immediately.
+4. Revert admin settings UI.
+5. **Restore migration**: If needed, re-populate `turns.phone` from backup and re-enable the column.
+6. Retain backup for 30 days, then purge.
 
 ## Dependencies
 
 - Meta Business Account (free to create)
 - WhatsApp Business Number (verified)
-- Vercel Pro (for serverless functions) or Supabase Edge Functions
+- Vercel (Hobby or Pro) for serverless functions, or Supabase Edge Functions
+  - **Note**: Vercel Serverless Functions are available on the Hobby plan. Evaluate Hobby plan limits (invocations, duration, memory) against expected webhook workload before mandating Pro.
 
 ## Success Criteria
 
