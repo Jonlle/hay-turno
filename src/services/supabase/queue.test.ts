@@ -72,142 +72,72 @@ describe('queue service', () => {
   });
 
   describe('joinQueueRemote', () => {
-    it('creates a remote turn with validated client name', async () => {
-      const lastTurnChain = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockReturnThis(),
-        limit: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: { turn_number: 3 }, error: null }),
-      };
-      const insertChain = {
-        insert: vi.fn().mockReturnThis(),
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: mockTurnRow, error: null }),
-      };
-
-      mockFrom
-        .mockReturnValueOnce(lastTurnChain)
-        .mockReturnValueOnce(insertChain);
+    it('creates a remote turn via allocate_turn RPC', async () => {
+      mockRpc.mockResolvedValue({ data: mockTurnRow, error: null });
 
       const result = await joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez');
 
       expect(result).toEqual(mockTurnRow);
-      expect(insertChain.insert).toHaveBeenCalledWith(
-        expect.objectContaining({
-          barbershop_id: BARBERSHOP_ID,
-          turn_number: 4,
-          client_name: 'Ana Rodriguez',
-          source: 'remote',
-          status: 'waiting',
-        })
-      );
+      expect(mockRpc).toHaveBeenCalledWith('allocate_turn', {
+        target_barbershop_id: BARBERSHOP_ID,
+        new_source: 'remote',
+        new_client_name: 'Ana Rodriguez',
+      });
     });
 
     it('validates client name with Zod schema', async () => {
       await expect(joinQueueRemote(BARBERSHOP_ID, 'A')).rejects.toThrow();
     });
 
-    it('throws when insert fails', async () => {
-      const lastTurnChain = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockReturnThis(),
-        limit: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
-      };
-      const insertChain = {
-        insert: vi.fn().mockReturnThis(),
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: null, error: { message: 'Insert failed' } }),
-      };
+    it('throws when RPC fails', async () => {
+      mockRpc.mockResolvedValue({ data: null, error: { message: 'RPC failed' } });
 
-      mockFrom
-        .mockReturnValueOnce(lastTurnChain)
-        .mockReturnValueOnce(insertChain);
-
-      await expect(joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez')).rejects.toEqual({ message: 'Insert failed' });
-    });
-
-    it('throws when last turn lookup fails', async () => {
-      const lastTurnChain = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockReturnThis(),
-        limit: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'Query failed' } }),
-      };
-      mockFrom.mockReturnValueOnce(lastTurnChain);
-
-      await expect(joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez')).rejects.toEqual({ message: 'Query failed' });
+      await expect(joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez')).rejects.toEqual({ message: 'RPC failed' });
     });
   });
 
   describe('createWalkInTurn', () => {
-    it('creates a walk-in turn with membership ID', async () => {
+    it('creates a walk-in turn via allocate_turn RPC', async () => {
       const walkInTurn = { ...mockTurnRow, source: 'walk-in' as const, created_by_membership_id: 'mem-1' };
-      const lastTurnChain = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockReturnThis(),
-        limit: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: { turn_number: 5 }, error: null }),
-      };
-      const insertChain = {
-        insert: vi.fn().mockReturnThis(),
-        select: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: walkInTurn, error: null }),
-      };
-
-      mockFrom
-        .mockReturnValueOnce(lastTurnChain)
-        .mockReturnValueOnce(insertChain);
+      mockRpc.mockResolvedValue({ data: walkInTurn, error: null });
 
       const result = await createWalkInTurn(BARBERSHOP_ID, 'Carlos Martinez', 'mem-1');
 
       expect(result).toEqual(walkInTurn);
-      expect(insertChain.insert).toHaveBeenCalledWith(
-        expect.objectContaining({
-          source: 'walk-in',
-          created_by_membership_id: 'mem-1',
-          turn_number: 6,
-        })
-      );
+      expect(mockRpc).toHaveBeenCalledWith('allocate_turn', {
+        target_barbershop_id: BARBERSHOP_ID,
+        new_source: 'walk-in',
+        new_client_name: 'Carlos Martinez',
+        new_membership_id: 'mem-1',
+      });
     });
 
     it('validates client name', async () => {
       await expect(createWalkInTurn(BARBERSHOP_ID, '', 'mem-1')).rejects.toThrow();
     });
 
-    it('throws when last turn lookup fails', async () => {
-      const lastTurnChain = {
-        select: vi.fn().mockReturnThis(),
-        eq: vi.fn().mockReturnThis(),
-        order: vi.fn().mockReturnThis(),
-        limit: vi.fn().mockReturnThis(),
-        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'Lookup failed' } }),
-      };
-      mockFrom.mockReturnValueOnce(lastTurnChain);
+    it('throws when RPC fails', async () => {
+      mockRpc.mockResolvedValue({ data: null, error: { message: 'RPC failed' } });
 
-      await expect(createWalkInTurn(BARBERSHOP_ID, 'Carlos Martinez', 'mem-1')).rejects.toEqual({ message: 'Lookup failed' });
+      await expect(createWalkInTurn(BARBERSHOP_ID, 'Carlos Martinez', 'mem-1')).rejects.toEqual({ message: 'RPC failed' });
     });
   });
 
   describe('callNextTurn', () => {
     it('calls next_turn RPC and returns formatted result', async () => {
       const rpcResult = {
-        previous_turn_id: 'turn-1',
-        new_called_turn_id: 'turn-2',
-        affected_turns: ['turn-1', 'turn-2'],
+        previous_turn_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+        new_called_turn_id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+        affected_turns: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'b2c3d4e5-f6a7-8901-bcde-f12345678901'],
       };
       mockRpc.mockResolvedValue({ data: rpcResult, error: null });
 
       const result = await callNextTurn(BARBERSHOP_ID);
 
       expect(result).toEqual({
-        previousTurnId: 'turn-1',
-        newCalledTurnId: 'turn-2',
-        affectedTurnIds: ['turn-1', 'turn-2'],
+        previousTurnId: rpcResult.previous_turn_id,
+        newCalledTurnId: rpcResult.new_called_turn_id,
+        affectedTurnIds: rpcResult.affected_turns,
       });
       expect(mockRpc).toHaveBeenCalledWith('next_turn', { target_barbershop_id: BARBERSHOP_ID });
     });
@@ -215,7 +145,7 @@ describe('queue service', () => {
     it('returns empty affected_turns when null', async () => {
       const rpcResult = {
         previous_turn_id: null,
-        new_called_turn_id: 'turn-1',
+        new_called_turn_id: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
         affected_turns: null,
       };
       mockRpc.mockResolvedValue({ data: rpcResult, error: null });
@@ -233,7 +163,7 @@ describe('queue service', () => {
   });
 
   describe('cancelTurn', () => {
-    it('updates turn status to cancelled', async () => {
+    it('updates turn status to cancelled with barbershop scope', async () => {
       const cancelledTurn = { ...mockTurnRow, status: 'cancelled' as const, cancelled_at: '2025-01-01T11:00:00Z' };
       const chain = {
         update: vi.fn().mockReturnThis(),
@@ -243,13 +173,11 @@ describe('queue service', () => {
       };
       mockFrom.mockReturnValue(chain);
 
-      const result = await cancelTurn('turn-1');
+      const result = await cancelTurn(BARBERSHOP_ID, 'turn-1');
 
       expect(result.status).toBe('cancelled');
-      expect(chain.update).toHaveBeenCalledWith(
-        expect.objectContaining({ status: 'cancelled' })
-      );
-      expect(chain.eq).toHaveBeenCalledWith('id', 'turn-1');
+      expect(chain.eq).toHaveBeenNthCalledWith(1, 'barbershop_id', BARBERSHOP_ID);
+      expect(chain.eq).toHaveBeenNthCalledWith(2, 'id', 'turn-1');
     });
   });
 });
