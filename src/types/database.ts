@@ -1,4 +1,4 @@
-export type Json =
+﻿export type Json =
   | string
   | number
   | boolean
@@ -7,146 +7,155 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.4"
+  }
   public: {
     Tables: {
-      barbershops: {
+      barbershop_memberships: {
         Row: {
-          id: string
-          slug: string
-          name: string
-          timezone: string
-          theme_settings: Json
-          is_active: boolean
+          barbershop_id: string
           created_at: string
+          id: string
+          profile_id: string
+          role: string
         }
         Insert: {
-          id?: string
-          slug: string
-          name: string
-          timezone?: string
-          theme_settings?: Json
-          is_active?: boolean
+          barbershop_id: string
           created_at?: string
+          id?: string
+          profile_id: string
+          role: string
         }
         Update: {
-          id?: string
-          slug?: string
-          name?: string
-          timezone?: string
-          theme_settings?: Json
-          is_active?: boolean
+          barbershop_id?: string
           created_at?: string
+          id?: string
+          profile_id?: string
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "barbershop_memberships_barbershop_id_fkey"
+            columns: ["barbershop_id"]
+            isOneToOne: false
+            referencedRelation: "barbershops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "barbershop_memberships_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      barbershops: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          theme_settings: Json
+          timezone: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          theme_settings?: Json
+          timezone?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          theme_settings?: Json
+          timezone?: string
         }
         Relationships: []
       }
       profiles: {
         Row: {
-          id: string
-          full_name: string | null
           created_at: string
+          full_name: string | null
+          id: string
         }
         Insert: {
-          id: string
-          full_name?: string | null
           created_at?: string
+          full_name?: string | null
+          id: string
         }
         Update: {
-          id?: string
-          full_name?: string | null
           created_at?: string
+          full_name?: string | null
+          id?: string
         }
         Relationships: []
       }
-      barbershop_memberships: {
-        Row: {
-          id: string
-          barbershop_id: string
-          profile_id: string
-          role: 'owner' | 'manager'
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          barbershop_id: string
-          profile_id: string
-          role: 'owner' | 'manager'
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          barbershop_id?: string
-          profile_id?: string
-          role?: 'owner' | 'manager'
-          created_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: 'barbershop_memberships_barbershop_id_fkey'
-            columns: ['barbershop_id']
-            isRelationOneToOne: false
-            referencedRelation: 'barbershops'
-          },
-          {
-            foreignKeyName: 'barbershop_memberships_profile_id_fkey'
-            columns: ['profile_id']
-            isRelationOneToOne: false
-            referencedRelation: 'profiles'
-          }
-        ]
-      }
       turns: {
         Row: {
-          id: string
           barbershop_id: string
-          turn_number: number
-          client_name: string
-          source: 'walk-in' | 'remote'
-          status: 'waiting' | 'called' | 'attended' | 'cancelled'
-          joined_at: string
           called_at: string | null
-          completed_at: string | null
           cancelled_at: string | null
+          client_name: string
+          completed_at: string | null
           created_by_membership_id: string | null
+          id: string
+          joined_at: string
+          source: string
+          status: string
+          turn_number: number
         }
         Insert: {
-          id?: string
           barbershop_id: string
-          turn_number: number
-          client_name: string
-          source: 'walk-in' | 'remote'
-          status?: 'waiting' | 'called' | 'attended' | 'cancelled'
-          joined_at?: string
           called_at?: string | null
-          completed_at?: string | null
           cancelled_at?: string | null
+          client_name: string
+          completed_at?: string | null
           created_by_membership_id?: string | null
+          id?: string
+          joined_at?: string
+          source: string
+          status?: string
+          turn_number: number
         }
         Update: {
-          id?: string
           barbershop_id?: string
-          turn_number?: number
-          client_name?: string
-          source?: 'walk-in' | 'remote'
-          status?: 'waiting' | 'called' | 'attended' | 'cancelled'
-          joined_at?: string
           called_at?: string | null
-          completed_at?: string | null
           cancelled_at?: string | null
+          client_name?: string
+          completed_at?: string | null
           created_by_membership_id?: string | null
+          id?: string
+          joined_at?: string
+          source?: string
+          status?: string
+          turn_number?: number
         }
         Relationships: [
           {
-            foreignKeyName: 'turns_barbershop_id_fkey'
-            columns: ['barbershop_id']
-            isRelationOneToOne: false
-            referencedRelation: 'barbershops'
+            foreignKeyName: "turns_barbershop_id_fkey"
+            columns: ["barbershop_id"]
+            isOneToOne: false
+            referencedRelation: "barbershops"
+            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: 'turns_created_by_membership_id_fkey'
-            columns: ['created_by_membership_id']
-            isRelationOneToOne: false
-            referencedRelation: 'barbershop_memberships'
-          }
+            foreignKeyName: "turns_created_by_membership_id_fkey"
+            columns: ["created_by_membership_id"]
+            isOneToOne: false
+            referencedRelation: "barbershop_memberships"
+            referencedColumns: ["id"]
+          },
         ]
       }
     }
@@ -154,26 +163,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      next_turn: {
-        Args: {
-          target_barbershop_id: string
-        }
-        Returns: {
-          previous_turn_id: string | null
-          new_called_turn_id: string | null
-          affected_turns: string[]
-        }[]
+      is_barbershop_member: {
+        Args: { target_barbershop_id: string }
+        Returns: boolean
       }
-      seed_demo_admin: {
-        Args: {
-          admin_user_id: string
-        }
-        Returns: undefined
-      }
-      seed_demo_environment: {
-        Args: Record<string, never>
-        Returns: Json
-      }
+      next_turn: { Args: { target_barbershop_id: string }; Returns: Json }
+      seed_demo_admin: { Args: { admin_user_id: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
@@ -184,25 +179,33 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, 'public'>]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
       Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views'])
-    ? (PublicSchema['Tables'] & PublicSchema['Views'])[PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
         Row: infer R
       }
       ? R
@@ -210,18 +213,24 @@ export type Tables<
     : never
 
 export type TablesInsert<
-  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Insert: infer I
       }
       ? I
@@ -229,18 +238,24 @@ export type TablesInsert<
     : never
 
 export type TablesUpdate<
-  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
-    : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
         Update: infer U
       }
       ? U
@@ -248,14 +263,41 @@ export type TablesUpdate<
     : never
 
 export type Enums<
-  PublicEnumNameOrOptions extends keyof PublicSchema['Enums'] | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
-    : never = never
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'] extends Record<string, unknown>
-    ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
-  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
-    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

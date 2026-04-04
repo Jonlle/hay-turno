@@ -1,117 +1,11 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '../../types/database';
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[];
+export { Database };
 
 export type TurnSource = 'walk-in' | 'remote';
 export type TurnStatus = 'waiting' | 'called' | 'attended' | 'cancelled';
 export type MembershipRole = 'owner' | 'manager';
-
-export interface Database {
-  public: {
-    Tables: {
-      barbershops: {
-        Row: {
-          id: string;
-          slug: string;
-          name: string;
-          timezone: string;
-          theme_settings: Json;
-          is_active: boolean;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          slug: string;
-          name: string;
-          timezone?: string;
-          theme_settings?: Json;
-          is_active?: boolean;
-          created_at?: string;
-        };
-        Update: Partial<Database['public']['Tables']['barbershops']['Insert']>;
-      };
-      profiles: {
-        Row: {
-          id: string;
-          full_name: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id: string;
-          full_name?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          full_name?: string | null;
-        };
-      };
-      barbershop_memberships: {
-        Row: {
-          id: string;
-          barbershop_id: string;
-          profile_id: string;
-          role: MembershipRole;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          barbershop_id: string;
-          profile_id: string;
-          role: MembershipRole;
-          created_at?: string;
-        };
-        Update: {
-          role?: MembershipRole;
-        };
-      };
-      turns: {
-        Row: {
-          id: string;
-          barbershop_id: string;
-          turn_number: number;
-          client_name: string;
-          source: TurnSource;
-          status: TurnStatus;
-          joined_at: string;
-          called_at: string | null;
-          completed_at: string | null;
-          cancelled_at: string | null;
-          created_by_membership_id: string | null;
-        };
-        Insert: {
-          id?: string;
-          barbershop_id: string;
-          turn_number: number;
-          client_name: string;
-          source: TurnSource;
-          status?: TurnStatus;
-          joined_at?: string;
-          called_at?: string | null;
-          completed_at?: string | null;
-          cancelled_at?: string | null;
-          created_by_membership_id?: string | null;
-        };
-        Update: {
-          turn_number?: number;
-          client_name?: string;
-          source?: TurnSource;
-          status?: TurnStatus;
-          joined_at?: string;
-          called_at?: string | null;
-          completed_at?: string | null;
-          cancelled_at?: string | null;
-          created_by_membership_id?: string | null;
-        };
-      };
-    };
-  };
-}
 
 export type HayTurnoSupabaseClient = SupabaseClient<Database>;
 
