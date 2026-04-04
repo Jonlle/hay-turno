@@ -78,7 +78,7 @@ describe('queue service', () => {
         eq: vi.fn().mockReturnThis(),
         order: vi.fn().mockReturnThis(),
         limit: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: { turn_number: 3 }, error: null }),
+        maybeSingle: vi.fn().mockResolvedValue({ data: { turn_number: 3 }, error: null }),
       };
       const insertChain = {
         insert: vi.fn().mockReturnThis(),
@@ -114,7 +114,7 @@ describe('queue service', () => {
         eq: vi.fn().mockReturnThis(),
         order: vi.fn().mockReturnThis(),
         limit: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: null, error: null }),
+        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
       };
       const insertChain = {
         insert: vi.fn().mockReturnThis(),
@@ -138,7 +138,7 @@ describe('queue service', () => {
         eq: vi.fn().mockReturnThis(),
         order: vi.fn().mockReturnThis(),
         limit: vi.fn().mockReturnThis(),
-        single: vi.fn().mockResolvedValue({ data: { turn_number: 5 }, error: null }),
+        maybeSingle: vi.fn().mockResolvedValue({ data: { turn_number: 5 }, error: null }),
       };
       const insertChain = {
         insert: vi.fn().mockReturnThis(),
