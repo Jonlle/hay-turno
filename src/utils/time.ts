@@ -36,6 +36,16 @@ export function toColombiaTime(value: DateInput) {
   return new Date(Date.UTC(year, month - 1, day, 12));
 }
 
+/**
+ * Get the UTC Date that corresponds to the start of "today" in Colombia timezone.
+ * Colombia is UTC-5, so midnight COT = 05:00 UTC.
+ */
+export function startOfColombiaDayUTC(value: DateInput = new Date()): Date {
+  const { year, month, day } = getColombiaDateParts(value);
+  // Midnight in Colombia (UTC-5) → 05:00 UTC
+  return new Date(Date.UTC(year, month - 1, day, 5, 0, 0, 0));
+}
+
 export function getTimeGroupingKey(value: DateInput, range: TimeGroupingRange) {
   const zonedDate = toColombiaTime(value);
 

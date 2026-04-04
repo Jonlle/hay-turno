@@ -2,6 +2,7 @@ import {
   getTimeGroupingKey,
   groupDatesByRange,
   groupRecordsByRange,
+  startOfColombiaDayUTC,
 } from './time';
 
 describe('time grouping helpers', () => {
@@ -34,6 +35,18 @@ describe('time grouping helpers', () => {
       { key: '2026-03-27', count: 1 },
       { key: '2026-04-01', count: 1 },
     ]);
+  });
+
+  it('returns midnight Colombia as UTC (05:00 UTC) for startOfColombiaDayUTC', () => {
+    // 2026-03-27T13:00:00Z is 08:00 COT on Mar 27 → midnight COT = 05:00 UTC same day
+    const result = startOfColombiaDayUTC('2026-03-27T13:00:00.000Z');
+    expect(result.toISOString()).toBe('2026-03-27T05:00:00.000Z');
+  });
+
+  it('handles late-night UTC that is previous day in Colombia', () => {
+    // 2026-03-27T04:30:00Z is 23:30 COT on Mar 26 → midnight COT Mar 26 = 2026-03-26T05:00:00Z
+    const result = startOfColombiaDayUTC('2026-03-27T04:30:00.000Z');
+    expect(result.toISOString()).toBe('2026-03-26T05:00:00.000Z');
   });
 
   it('skips records without completed dates when grouping', () => {
