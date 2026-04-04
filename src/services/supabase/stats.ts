@@ -1,5 +1,5 @@
 import { getSupabaseBrowserClient } from './client';
-import { groupRecordsByRange, type TimeGroupingRange } from '../../utils/time';
+import { groupRecordsByRange, startOfColombiaDayUTC, type TimeGroupingRange } from '../../utils/time';
 
 /**
  * Stats result for attended turns
@@ -68,23 +68,25 @@ export async function getAttendedStats(
   const now = new Date();
   let startDate: Date;
 
-  // Calculate start date based on time range
+  // Calculate start date based on time range using Colombia timezone
   switch (timeRange) {
     case 'day':
-      startDate = new Date(now);
-      startDate.setHours(0, 0, 0, 0);
+      startDate = startOfColombiaDayUTC(now);
       break;
-    case 'week':
-      startDate = new Date(now);
-      startDate.setDate(startDate.getDate() - 7);
+    case 'week': {
+      const todayStart = startOfColombiaDayUTC(now);
+      todayStart.setUTCDate(todayStart.getUTCDate() - 7);
+      startDate = todayStart;
       break;
-    case 'month':
-      startDate = new Date(now);
-      startDate.setMonth(startDate.getMonth() - 1);
+    }
+    case 'month': {
+      const todayStart = startOfColombiaDayUTC(now);
+      todayStart.setUTCMonth(todayStart.getUTCMonth() - 1);
+      startDate = todayStart;
       break;
+    }
     default:
-      startDate = new Date(now);
-      startDate.setHours(0, 0, 0, 0);
+      startDate = startOfColombiaDayUTC(now);
   }
 
   const endDate = now;
@@ -127,8 +129,7 @@ export async function getAttendedStats(
 export async function getTodayAttendedCount(barbershopId: string): Promise<number> {
   const supabase = getSupabaseBrowserClient();
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  const todayStart = startOfColombiaDayUTC();
 
   const { count, error } = await supabase
     .from('turns')
@@ -150,10 +151,10 @@ export async function getTodayAttendedCount(barbershopId: string): Promise<numbe
 export async function getAverageWaitTime(barbershopId: string): Promise<number> {
   const supabase = getSupabaseBrowserClient();
 
-  // Get all attended turns from today
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
+  // Get all attended turns from today (Colombia timezone)
+  const todayStart = startOfColombiaDayUTC();
 
+  // TODO: Replace with generated types from `supabase gen types typescript`
   const { data, error } = await (supabase.from('turns') as any)
     .select('joined_at, completed_at')
     .eq('barbershop_id', barbershopId)
