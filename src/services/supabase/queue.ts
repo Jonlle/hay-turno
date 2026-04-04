@@ -49,13 +49,17 @@ export async function joinQueueRemote(
   const supabase = getSupabaseBrowserClient();
 
   // Get the next turn number for this barbershop
-  const { data: lastTurn } = await supabase
+  const { data: lastTurn, error: lookupError } = await supabase
     .from('turns')
     .select('turn_number')
     .eq('barbershop_id', barbershopId)
     .order('turn_number', { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  if (lookupError) {
+    throw lookupError;
+  }
 
   const nextTurnNumber = (lastTurn?.turn_number ?? 0) + 1;
 
@@ -96,13 +100,17 @@ export async function createWalkInTurn(
   const supabase = getSupabaseBrowserClient();
 
   // Get the next turn number for this barbershop
-  const { data: lastTurn } = await supabase
+  const { data: lastTurn, error: lookupError } = await supabase
     .from('turns')
     .select('turn_number')
     .eq('barbershop_id', barbershopId)
     .order('turn_number', { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  if (lookupError) {
+    throw lookupError;
+  }
 
   const nextTurnNumber = (lastTurn?.turn_number ?? 0) + 1;
 
