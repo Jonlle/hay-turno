@@ -128,6 +128,19 @@ describe('queue service', () => {
 
       await expect(joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez')).rejects.toEqual({ message: 'Insert failed' });
     });
+
+    it('throws when last turn lookup fails', async () => {
+      const lastTurnChain = {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        order: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'Query failed' } }),
+      };
+      mockFrom.mockReturnValueOnce(lastTurnChain);
+
+      await expect(joinQueueRemote(BARBERSHOP_ID, 'Ana Rodriguez')).rejects.toEqual({ message: 'Query failed' });
+    });
   });
 
   describe('createWalkInTurn', () => {
@@ -164,6 +177,19 @@ describe('queue service', () => {
 
     it('validates client name', async () => {
       await expect(createWalkInTurn(BARBERSHOP_ID, '', 'mem-1')).rejects.toThrow();
+    });
+
+    it('throws when last turn lookup fails', async () => {
+      const lastTurnChain = {
+        select: vi.fn().mockReturnThis(),
+        eq: vi.fn().mockReturnThis(),
+        order: vi.fn().mockReturnThis(),
+        limit: vi.fn().mockReturnThis(),
+        maybeSingle: vi.fn().mockResolvedValue({ data: null, error: { message: 'Lookup failed' } }),
+      };
+      mockFrom.mockReturnValueOnce(lastTurnChain);
+
+      await expect(createWalkInTurn(BARBERSHOP_ID, 'Carlos Martinez', 'mem-1')).rejects.toEqual({ message: 'Lookup failed' });
     });
   });
 
