@@ -154,6 +154,7 @@ export async function getAverageWaitTime(barbershopId: string): Promise<number> 
   // Get all attended turns from today (Colombia timezone)
   const todayStart = startOfColombiaDayUTC();
 
+  // TODO: Replace with generated types from `supabase gen types typescript`
   const { data, error } = await (supabase.from('turns') as any)
     .select('joined_at, completed_at')
     .eq('barbershop_id', barbershopId)

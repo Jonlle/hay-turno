@@ -61,7 +61,7 @@ export function useAdminQueue(barbershopId: string | undefined) {
   });
 
   const cancelMutation = useMutation({
-    mutationFn: (turnId: string) => cancelTurn(turnId),
+    mutationFn: (turnId: string) => cancelTurn(barbershopId!, turnId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: adminQueueKeys.byBarbershop(barbershopId!),

@@ -27,6 +27,12 @@ export const walkInTurnSchema = z.object({
   source: z.literal('walk-in').default('walk-in'),
 });
 
+export const nextTurnResultSchema = z.object({
+  previous_turn_id: z.string().uuid().nullable(),
+  new_called_turn_id: z.string().uuid().nullable(),
+  affected_turns: z.array(z.string().uuid()).nullable().transform((val) => val ?? []),
+});
+
 export const turnRecordSchema = z.object({
   id: z.string().uuid(),
   barbershopId: z.string().uuid(),

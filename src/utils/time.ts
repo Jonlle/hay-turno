@@ -94,3 +94,12 @@ export function groupRecordsByRange<T>(
 
   return groupDatesByRange(dates, range);
 }
+
+/**
+ * Returns a Date representing the start of the current day in Colombia timezone,
+ * expressed in UTC. Use this for database queries to avoid browser-local timezone bugs.
+ */
+export function startOfColombiaDayUTC(referenceDate: Date = new Date()): Date {
+  const { year, month, day } = getColombiaDateParts(referenceDate);
+  return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+}

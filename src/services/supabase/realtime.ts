@@ -1,6 +1,8 @@
 import { getSupabaseBrowserClient } from './client';
-import type { TurnRow } from './queue';
+import type { Database } from '../../types/database';
 import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
+
+type TurnRow = Database['public']['Tables']['turns']['Row'];
 
 /**
  * Callback for queue changes

@@ -161,6 +161,7 @@ Supabase migrations live in `supabase/migrations/`.
 - New hooks and services should include tests
 - UI changes should include mobile validation evidence when relevant
 - Never add AI attribution to commits or PRs
+- **NEVER run `git commit`, `git push`, `git merge`, or `git reset` without explicit user approval. Always show the planned commit message and list of changed files first, and wait for the user to say "commit", "push", or "go ahead". Only bypass this if the user explicitly says "commit and push" or similar direct command.**
 
 ## Agent Behavior Expectations
 

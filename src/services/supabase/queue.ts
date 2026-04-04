@@ -1,22 +1,16 @@
 import { getSupabaseBrowserClient } from './client';
-import { remoteTurnSchema, walkInTurnSchema, turnRecordSchema } from '../../schemas/turn';
-import type { TurnRecord } from '../../schemas/turn';
+import type { Database } from '../../types/database';
+import { remoteTurnSchema, walkInTurnSchema, nextTurnResultSchema } from '../../schemas/turn';
+
+type TurnRow = Database['public']['Tables']['turns']['Row'];
 
 /**
- * Turn row from the database
+ * Response type for next_turn RPC function
  */
-export interface TurnRow {
-  id: string;
-  barbershop_id: string;
-  turn_number: number;
-  client_name: string;
-  source: 'walk-in' | 'remote';
-  status: 'waiting' | 'called' | 'attended' | 'cancelled';
-  joined_at: string;
-  called_at: string | null;
-  completed_at: string | null;
-  cancelled_at: string | null;
-  created_by_membership_id: string | null;
+export interface NextTurnResult {
+  previousTurnId: string | null;
+  newCalledTurnId: string | null;
+  affectedTurnIds: string[];
 }
 
 /**
@@ -37,42 +31,27 @@ export async function getQueueForBarbershop(barbershopId: string): Promise<TurnR
     throw error;
   }
 
-  return (data ?? []) as TurnRow[];
+  return data ?? [];
 }
 
 /**
  * Join the queue as a remote client.
  * The client_name is validated by the Zod schema before sending.
+ * Uses the allocate_turn RPC for atomic turn number assignment.
  */
 export async function joinQueueRemote(
   barbershopId: string,
   clientName: string
 ): Promise<TurnRow> {
-  // Validate input using the schema
   const validated = remoteTurnSchema.parse({ clientName });
 
   const supabase = getSupabaseBrowserClient();
 
-  // Get the next turn number for this barbershop
-  const { data: lastTurn } = await (supabase.from('turns') as any)
-    .select('turn_number')
-    .eq('barbershop_id', barbershopId)
-    .order('turn_number', { ascending: false })
-    .limit(1)
-    .single();
-
-  const nextTurnNumber = ((lastTurn as any)?.turn_number ?? 0) + 1;
-
-  const { data, error } = await (supabase.from('turns') as any)
-    .insert({
-      barbershop_id: barbershopId,
-      turn_number: nextTurnNumber,
-      client_name: validated.clientName,
-      source: 'remote',
-      status: 'waiting',
-    })
-    .select()
-    .single();
+  const { data, error } = await (supabase.rpc as any)('allocate_turn', {
+    target_barbershop_id: barbershopId,
+    new_source: 'remote',
+    new_client_name: validated.clientName,
+  });
 
   if (error) {
     throw error;
@@ -82,44 +61,29 @@ export async function joinQueueRemote(
     throw new Error('Failed to create remote turn - no data returned');
   }
 
-  return data as TurnRow;
+  return data as unknown as TurnRow;
 }
 
 /**
  * Create a walk-in turn (requires authenticated admin).
  * The client_name is validated and membership_id is attached.
+ * Uses the allocate_turn RPC for atomic turn number assignment.
  */
 export async function createWalkInTurn(
   barbershopId: string,
   clientName: string,
   membershipId: string
 ): Promise<TurnRow> {
-  // Validate input using the schema
   const validated = walkInTurnSchema.parse({ clientName });
 
   const supabase = getSupabaseBrowserClient();
 
-  // Get the next turn number for this barbershop
-  const { data: lastTurn } = await (supabase.from('turns') as any)
-    .select('turn_number')
-    .eq('barbershop_id', barbershopId)
-    .order('turn_number', { ascending: false })
-    .limit(1)
-    .single();
-
-  const nextTurnNumber = ((lastTurn as any)?.turn_number ?? 0) + 1;
-
-  const { data, error } = await (supabase.from('turns') as any)
-    .insert({
-      barbershop_id: barbershopId,
-      turn_number: nextTurnNumber,
-      client_name: validated.clientName,
-      source: 'walk-in',
-      status: 'waiting',
-      created_by_membership_id: membershipId,
-    })
-    .select()
-    .single();
+  const { data, error } = await (supabase.rpc as any)('allocate_turn', {
+    target_barbershop_id: barbershopId,
+    new_source: 'walk-in',
+    new_client_name: validated.clientName,
+    new_membership_id: membershipId,
+  });
 
   if (error) {
     throw error;
@@ -129,32 +93,19 @@ export async function createWalkInTurn(
     throw new Error('Failed to create walk-in turn - no data returned');
   }
 
-  return data as TurnRow;
-}
-
-/**
- * Response type for next_turn RPC function
- */
-export interface NextTurnResult {
-  previous_turn_id: string | null;
-  new_called_turn_id: string | null;
-  affected_turns: string[];
+  return data as unknown as TurnRow;
 }
 
 /**
  * Call the next turn in the queue - uses the DB-owned RPC for race-safe operation.
  * Returns the result from the Next function.
  */
-export async function callNextTurn(barbershopId: string): Promise<{
-  previousTurnId: string | null;
-  newCalledTurnId: string | null;
-  affectedTurnIds: string[];
-}> {
+export async function callNextTurn(barbershopId: string): Promise<NextTurnResult> {
   const supabase = getSupabaseBrowserClient();
 
   const { data, error } = await supabase.rpc('next_turn', {
     target_barbershop_id: barbershopId,
-  } as any);
+  });
 
   if (error) {
     throw error;
@@ -164,25 +115,28 @@ export async function callNextTurn(barbershopId: string): Promise<{
     throw new Error('Next turn RPC returned no data');
   }
 
-  const result = data as NextTurnResult;
+  const result = nextTurnResultSchema.parse(data);
   return {
     previousTurnId: result.previous_turn_id,
     newCalledTurnId: result.new_called_turn_id,
-    affectedTurnIds: result.affected_turns ?? [],
+    affectedTurnIds: result.affected_turns,
   };
 }
 
 /**
  * Cancel a turn (mark as cancelled).
+ * Scoped by barbershop_id for tenant isolation.
  */
-export async function cancelTurn(turnId: string): Promise<TurnRow> {
+export async function cancelTurn(barbershopId: string, turnId: string): Promise<TurnRow> {
   const supabase = getSupabaseBrowserClient();
 
-  const { data, error } = await (supabase.from('turns') as any)
+  const { data, error } = await supabase
+    .from('turns')
     .update({
       status: 'cancelled',
       cancelled_at: new Date().toISOString(),
     })
+    .eq('barbershop_id', barbershopId)
     .eq('id', turnId)
     .select()
     .single();
@@ -191,18 +145,20 @@ export async function cancelTurn(turnId: string): Promise<TurnRow> {
     throw error;
   }
 
-  return data as TurnRow;
+  return data;
 }
 
 /**
  * Get a single turn by ID.
+ * Scoped by barbershop_id for tenant isolation.
  */
-export async function getTurnById(turnId: string): Promise<TurnRow | null> {
+export async function getTurnById(barbershopId: string, turnId: string): Promise<TurnRow | null> {
   const supabase = getSupabaseBrowserClient();
 
   const { data, error } = await supabase
     .from('turns')
     .select('*')
+    .eq('barbershop_id', barbershopId)
     .eq('id', turnId)
     .single();
 
@@ -213,15 +169,5 @@ export async function getTurnById(turnId: string): Promise<TurnRow | null> {
     throw error;
   }
 
-  return data as TurnRow;
-}
-
-/**
- * Validate a turn record against the schema.
- */
-export function validateTurnRecord(turn: unknown): TurnRecord[] {
-  if (Array.isArray(turn)) {
-    return turn.map((t) => turnRecordSchema.parse(t));
-  }
-  return [turnRecordSchema.parse(turn)];
+  return data;
 }
