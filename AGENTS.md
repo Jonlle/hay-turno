@@ -87,7 +87,7 @@ Location: `.agents/skills/{skill-name}/SKILL.md`
 
 ## Shared Skills
 
-Shared skill conventions are managed globally at `C:\Users\Jhonatan Llerena\.config\opencode\skills\_shared\` and are automatically available to all projects.
+Shared skill conventions are managed globally and automatically available to all projects via the skill registry.
 
 For more details, see the skill registry at `.atl/skill-registry.md`.
 
