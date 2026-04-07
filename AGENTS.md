@@ -71,17 +71,17 @@ Location: `.agents/skills/{skill-name}/SKILL.md`
 
 ### SDD Skills — Source of Truth
 
-| Skill       | Use for                                                                        |
-| ----------- | ------------------------------------------------------------------------------ |
-| **sdd-init**    | Initialize SDD context, detect stack, bootstrap persistence                  |
-| **sdd-explore** | Investigate codebase, think through features, clarify requirements            |
-| **sdd-propose** | Create or update change proposals                                             |
-| **sdd-spec**    | Write or update specifications                                                |
-| **sdd-design**  | Write or update technical design                                             |
-| **sdd-tasks**   | Break down change into task checklist                                         |
-| **sdd-apply**   | Implement tasks from a change                                                  |
-| **sdd-verify**  | Validate implementation matches specs                                         |
-| **sdd-archive** | Archive completed changes                                                     |
+| Skill           | Use for                                                            |
+| --------------- | ------------------------------------------------------------------ |
+| **sdd-init**    | Initialize SDD context, detect stack, bootstrap persistence        |
+| **sdd-explore** | Investigate codebase, think through features, clarify requirements |
+| **sdd-propose** | Create or update change proposals                                  |
+| **sdd-spec**    | Write or update specifications                                     |
+| **sdd-design**  | Write or update technical design                                   |
+| **sdd-tasks**   | Break down change into task checklist                              |
+| **sdd-apply**   | Implement tasks from a change                                      |
+| **sdd-verify**  | Validate implementation matches specs                              |
+| **sdd-archive** | Archive completed changes                                          |
 
 > Full registry: `.atl/skill-registry.md`
 
