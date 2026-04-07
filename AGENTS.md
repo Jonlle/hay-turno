@@ -85,14 +85,11 @@ Location: `.agents/skills/{skill-name}/SKILL.md`
 
 > Full registry: `.atl/skill-registry.md`
 
-## Shared Skills — Conventions
+## Shared Skills
 
-| File | Description |
-|------|-------------|
-| `.agents/skills/_shared/skill-resolver.md` | Skill resolution protocol for sub-agents |
-| `.agents/skills/_shared/engram-convention.md` | Engram persistence naming conventions |
-| `.agents/skills/_shared/openspec-convention.md` | OpenSpec directory conventions |
-| `.agents/skills/_shared/persistence-convention.md` | Persistence contract between modes |
+Shared skill conventions are managed globally at `C:\Users\Jhonatan Llerena\.config\opencode\skills\_shared\` and are automatically available to all projects.
+
+For more details, see the skill registry at `.atl/skill-registry.md`.
 
 ## Project-Specific Rules
 
