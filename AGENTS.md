@@ -57,6 +57,8 @@ pnpm vitest run src/hooks/useQueue.test.ts -t "handles next turn"
 
 The following installed skills already contain detailed implementation guidance. Do **not** duplicate those instructions in this file; follow the skill directly.
 
+### Project Skills — Source of Truth
+
 | Skill                                | Use for                                                                      |
 | ------------------------------------ | ---------------------------------------------------------------------------- |
 | **shadcn**                           | shadcn/ui component usage, composition, minimal primitive selection          |
@@ -64,24 +66,33 @@ The following installed skills already contain detailed implementation guidance.
 | **vercel-react-best-practices**      | React architecture, rendering, async/data-fetching, component discipline     |
 | **web-design-guidelines**            | Accessibility, touch UX, mobile-first UI, forms, theming, web quality audits |
 | **git-commit**                       | Conventional commits, diff analysis, message generation                      |
-| **sdd-init**                         | Initialize SDD context, detect stack, bootstrap persistence                  |
-| **sdd-explore**                      | Investigate codebase, think through features, clarify requirements           |
-| **sdd-propose**                      | Create or update change proposals                                            |
-| **sdd-spec**                         | Write or update specifications                                               |
-| **sdd-design**                       | Write or update technical design                                             |
-| **sdd-tasks**                        | Break down change into task checklist                                        |
-| **sdd-apply**                        | Implement tasks from a change                                                |
-| **sdd-verify**                       | Validate implementation matches specs                                        |
-| **sdd-archive**                      | Archive completed changes                                                    |
+
+Location: `.agents/skills/{skill-name}/SKILL.md`
+
+### SDD Skills — Source of Truth
+
+| Skill       | Use for                                                                        |
+| ----------- | ------------------------------------------------------------------------------ |
+| **sdd-init**    | Initialize SDD context, detect stack, bootstrap persistence                  |
+| **sdd-explore** | Investigate codebase, think through features, clarify requirements            |
+| **sdd-propose** | Create or update change proposals                                             |
+| **sdd-spec**    | Write or update specifications                                                |
+| **sdd-design**  | Write or update technical design                                             |
+| **sdd-tasks**   | Break down change into task checklist                                         |
+| **sdd-apply**   | Implement tasks from a change                                                  |
+| **sdd-verify**  | Validate implementation matches specs                                         |
+| **sdd-archive** | Archive completed changes                                                     |
 
 > Full registry: `.atl/skill-registry.md`
 
-## Shared Skills
+## Shared Skills — Conventions
 
-- `.agents/skills/_shared/skill-resolver.md` — Skill resolution protocol for sub-agents
-- `.agents/skills/_shared/engram-convention.md` — Engram persistence naming conventions
-- `.agents/skills/_shared/openspec-convention.md` — OpenSpec directory conventions
-- `.agents/skills/_shared/persistence-convention.md` — Persistence contract between modes
+| File | Description |
+|------|-------------|
+| `.agents/skills/_shared/skill-resolver.md` | Skill resolution protocol for sub-agents |
+| `.agents/skills/_shared/engram-convention.md` | Engram persistence naming conventions |
+| `.agents/skills/_shared/openspec-convention.md` | OpenSpec directory conventions |
+| `.agents/skills/_shared/persistence-convention.md` | Persistence contract between modes |
 
 ## Project-Specific Rules
 
