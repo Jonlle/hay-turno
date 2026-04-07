@@ -64,8 +64,24 @@ The following installed skills already contain detailed implementation guidance.
 | **vercel-react-best-practices**      | React architecture, rendering, async/data-fetching, component discipline     |
 | **web-design-guidelines**            | Accessibility, touch UX, mobile-first UI, forms, theming, web quality audits |
 | **git-commit**                       | Conventional commits, diff analysis, message generation                      |
+| **sdd-init**                         | Initialize SDD context, detect stack, bootstrap persistence                  |
+| **sdd-explore**                      | Investigate codebase, think through features, clarify requirements           |
+| **sdd-propose**                      | Create or update change proposals                                            |
+| **sdd-spec**                         | Write or update specifications                                               |
+| **sdd-design**                       | Write or update technical design                                             |
+| **sdd-tasks**                        | Break down change into task checklist                                        |
+| **sdd-apply**                        | Implement tasks from a change                                                |
+| **sdd-verify**                       | Validate implementation matches specs                                        |
+| **sdd-archive**                      | Archive completed changes                                                    |
 
 > Full registry: `.atl/skill-registry.md`
+
+## Shared Skills
+
+- `.agents/skills/_shared/skill-resolver.md` — Skill resolution protocol for sub-agents
+- `.agents/skills/_shared/engram-convention.md` — Engram persistence naming conventions
+- `.agents/skills/_shared/openspec-convention.md` — OpenSpec directory conventions
+- `.agents/skills/_shared/persistence-convention.md` — Persistence contract between modes
 
 ## Project-Specific Rules
 

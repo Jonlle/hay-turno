@@ -16,4 +16,4 @@ Documentation and planning artifacts for HayTurno live here.
 
 ## Notes
 
-- MVP is complete and deployed: https://hayturno.vercel.app/b/demo
+- MVP is complete and deployed: <https://hayturno.vercel.app/b/demo>
