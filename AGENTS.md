@@ -57,6 +57,8 @@ pnpm vitest run src/hooks/useQueue.test.ts -t "handles next turn"
 
 The following installed skills already contain detailed implementation guidance. Do **not** duplicate those instructions in this file; follow the skill directly.
 
+### Project Skills — Source of Truth
+
 | Skill                                | Use for                                                                      |
 | ------------------------------------ | ---------------------------------------------------------------------------- |
 | **shadcn**                           | shadcn/ui component usage, composition, minimal primitive selection          |
@@ -65,7 +67,29 @@ The following installed skills already contain detailed implementation guidance.
 | **web-design-guidelines**            | Accessibility, touch UX, mobile-first UI, forms, theming, web quality audits |
 | **git-commit**                       | Conventional commits, diff analysis, message generation                      |
 
+Location: `.agents/skills/{skill-name}/SKILL.md`
+
+### SDD Skills — Source of Truth
+
+| Skill           | Use for                                                            |
+| --------------- | ------------------------------------------------------------------ |
+| **sdd-init**    | Initialize SDD context, detect stack, bootstrap persistence        |
+| **sdd-explore** | Investigate codebase, think through features, clarify requirements |
+| **sdd-propose** | Create or update change proposals                                  |
+| **sdd-spec**    | Write or update specifications                                     |
+| **sdd-design**  | Write or update technical design                                   |
+| **sdd-tasks**   | Break down change into task checklist                              |
+| **sdd-apply**   | Implement tasks from a change                                      |
+| **sdd-verify**  | Validate implementation matches specs                              |
+| **sdd-archive** | Archive completed changes                                          |
+
 > Full registry: `.atl/skill-registry.md`
+
+## Shared Skills
+
+Shared skill conventions are managed globally and automatically available to all projects via the skill registry.
+
+For more details, see the skill registry at `.atl/skill-registry.md`.
 
 ## Project-Specific Rules
 
